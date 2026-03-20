@@ -17,11 +17,11 @@
   --text: #111111;
   --text2: #555555;
   --text3: #999999;
-  --accent: #ff3b30;
+  --accent: #007aff;
   --run: #34c759;
   --hyrox: #007aff;
   --deka: #ff9500;
-  --crossfit: #ff3b30;
+  --crossfit: #ff9500;
   --r: 20px;
   --rsm: 12px;
   --safe-b: env(safe-area-inset-bottom, 0px);
@@ -40,10 +40,10 @@ body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--bg); col
 .li-sub { font-size:15px; color:var(--text3); margin-bottom:44px; }
 .li-label { font-size:11px; font-weight:700; color:var(--text3); letter-spacing:.6px; text-transform:uppercase; display:block; margin-bottom:8px; }
 .li-input { width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:var(--rsm); padding:15px 16px; font-family:'DM Sans',sans-serif; font-size:16px; color:var(--text); outline:none; margin-bottom:12px; transition:border-color .2s; }
-.li-input:focus { border-color:var(--text); }
+.li-input:focus { border-color:var(--accent); }
 .li-btn { width:100%; background:var(--text); border:none; color:#fff; border-radius:var(--rsm); padding:16px; font-family:'DM Sans',sans-serif; font-size:16px; font-weight:600; cursor:pointer; transition:opacity .15s; }
 .li-btn:active { opacity:.85; }
-.li-err { font-size:13px; color:var(--accent); margin-top:10px; display:none; font-weight:500; }
+.li-err { font-size:13px; color:#ff9500; margin-top:10px; display:none; font-weight:500; }
 .li-err.show { display:block; }
 
 /* APP */
@@ -70,7 +70,7 @@ body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--bg); col
 .wd.sel .wd-d { color:#fff; }
 .wd.tod:not(.sel) .wd-d { color:var(--accent); }
 .wd-dot { width:5px; height:5px; border-radius:50%; background:var(--border); }
-.wd-dot.run{background:var(--run)} .wd-dot.hyrox{background:var(--hyrox)} .wd-dot.deka{background:var(--deka)} .wd-dot.crossfit{background:var(--crossfit)}
+.wd-dot.run{background:var(--run)} .wd-dot.hyrox{background:var(--hyrox)} .wd-dot.deka{background:var(--deka)} .wd-dot.crossfit{background:var(--deka)}
 
 /* FILTERS */
 .filter-row { display:flex; gap:6px; padding:12px 24px; overflow-x:auto; scrollbar-width:none; background:var(--surface); border-bottom:1px solid var(--border); }
@@ -91,16 +91,16 @@ body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--bg); col
 @keyframes sup { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
 .wod-card:active { transform:scale(.984); }
 .wc-bar { height:3px; }
-.wc-bar.run{background:var(--run)} .wc-bar.hyrox{background:var(--hyrox)} .wc-bar.deka{background:var(--deka)} .wc-bar.crossfit{background:var(--crossfit)}
+.wc-bar.run{background:var(--run)} .wc-bar.hyrox{background:var(--hyrox)} .wc-bar.deka{background:var(--deka)} .wc-bar.crossfit{background:var(--deka)}
 .wc-in { padding:16px 18px 18px; }
 .wc-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
 .wc-sp { display:flex; align-items:center; gap:6px; }
 .wc-sd { width:7px; height:7px; border-radius:50%; }
-.wc-sd.run{background:var(--run)} .wc-sd.hyrox{background:var(--hyrox)} .wc-sd.deka{background:var(--deka)} .wc-sd.crossfit{background:var(--crossfit)}
+.wc-sd.run{background:var(--run)} .wc-sd.hyrox{background:var(--hyrox)} .wc-sd.deka{background:var(--deka)} .wc-sd.crossfit{background:var(--deka)}
 .wc-sn { font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; }
-.wc-sn.run{color:var(--run)} .wc-sn.hyrox{color:var(--hyrox)} .wc-sn.deka{color:var(--deka)} .wc-sn.crossfit{color:var(--crossfit)}
+.wc-sn.run{color:var(--run)} .wc-sn.hyrox{color:var(--hyrox)} .wc-sn.deka{color:var(--deka)} .wc-sn.crossfit{color:var(--deka)}
 .wc-int { font-size:11px; font-weight:500; padding:3px 9px; border-radius:8px; }
-.i-baja{background:rgba(52,199,89,.1);color:#1a8a3c} .i-media{background:rgba(255,149,0,.1);color:#b36800} .i-alta,.i-maxima{background:rgba(255,59,48,.1);color:var(--accent)}
+.i-baja{background:rgba(52,199,89,.1);color:#1a8a3c} .i-media{background:rgba(255,149,0,.1);color:#b36800} .i-alta,.i-maxima{background:rgba(255,149,0,.12);color:#b36800}
 .wc-title { font-size:20px; font-weight:700; color:var(--text); letter-spacing:-.5px; line-height:1.2; margin-bottom:12px; }
 .wc-chips { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:13px; }
 .chip { font-size:12px; font-weight:500; padding:4px 10px; border-radius:8px; background:var(--bg); color:var(--text2); }
@@ -136,7 +136,7 @@ body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--bg); col
 .det-back { display:flex; align-items:center; gap:4px; font-size:15px; font-weight:500; color:var(--accent); cursor:pointer; margin-bottom:14px; width:fit-content; }
 .det-sp-row { display:flex; align-items:center; gap:8px; margin-bottom:5px; flex-wrap:wrap; }
 .det-sp-pill { font-size:11px; font-weight:700; padding:3px 10px; border-radius:8px; text-transform:uppercase; letter-spacing:.4px; }
-.det-sp-pill.run{background:rgba(52,199,89,.12);color:#1a8a3c} .det-sp-pill.hyrox{background:rgba(0,122,255,.1);color:#005ec4} .det-sp-pill.deka{background:rgba(255,149,0,.1);color:#b36800} .det-sp-pill.crossfit{background:rgba(255,59,48,.1);color:var(--accent)}
+.det-sp-pill.run{background:rgba(52,199,89,.12);color:#1a8a3c} .det-sp-pill.hyrox{background:rgba(0,122,255,.1);color:#005ec4} .det-sp-pill.deka{background:rgba(255,149,0,.1);color:#b36800} .det-sp-pill.crossfit{background:rgba(255,149,0,.1);color:#b36800}
 .det-date { font-size:13px; color:var(--text3); }
 .det-title { font-size:28px; font-weight:700; color:var(--text); letter-spacing:-1px; line-height:1.1; margin-bottom:14px; }
 .det-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
@@ -163,6 +163,64 @@ body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--bg); col
 .mm-m { padding:11px 8px; border-radius:12px; text-align:center; font-size:13px; font-weight:500; cursor:pointer; border:1px solid var(--border); color:var(--text2); transition:all .15s; }
 .mm-m.on { background:var(--text); color:#fff; border-color:var(--text); }
 .mm-m:active { opacity:.8; }
+
+/* PROGRESS PANEL */
+.prog-panel { position:fixed; inset:0; background:var(--bg); z-index:100; overflow-y:auto; transform:translateY(100%); transition:transform .35s cubic-bezier(.32,.72,0,1); }
+.prog-panel.open { transform:none; }
+.prog-hdr { background:var(--surface); padding:52px 24px 20px; border-bottom:1px solid var(--border); }
+.prog-title { font-size:26px; font-weight:700; color:var(--text); letter-spacing:-1px; margin-bottom:2px; }
+.prog-sub { font-size:13px; color:var(--text3); }
+.prog-body { padding:16px; padding-bottom:calc(100px + var(--safe-b)); }
+.section-hdr { font-size:11px; font-weight:700; color:var(--text3); letter-spacing:.7px; text-transform:uppercase; padding:4px 0 12px; }
+.pcard { background:var(--surface); border-radius:var(--r); border:1px solid var(--border); padding:16px; margin-bottom:12px; }
+.pcard-title { font-size:13px; font-weight:700; color:var(--text); margin-bottom:14px; }
+
+/* BAR CHART */
+.bar-chart { display:flex; align-items:flex-end; gap:8px; height:100px; }
+.bc-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; }
+.bc-bar-wrap { flex:1; width:100%; display:flex; align-items:flex-end; }
+.bc-bar { width:100%; border-radius:5px 5px 0 0; min-height:3px; transition:height .5s ease; }
+.bc-val { font-size:10px; font-weight:700; color:var(--text2); }
+.bc-lbl { font-size:10px; font-weight:500; color:var(--text3); }
+
+/* KM CHART */
+.km-chart { display:flex; align-items:flex-end; gap:8px; height:100px; }
+
+/* EVENTS */
+.event-row { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+.event-row:last-child { border-bottom:none; padding-bottom:0; }
+.event-date-box { width:40px; height:40px; border-radius:10px; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; flex-shrink:0; }
+.ev-day { font-size:16px; font-weight:700; color:var(--text); line-height:1; }
+.ev-mon { font-size:9px; font-weight:600; color:var(--text3); text-transform:uppercase; }
+.event-info { flex:1; }
+.ev-name { font-size:14px; font-weight:600; color:var(--text); margin-bottom:2px; }
+.ev-meta { font-size:12px; color:var(--text3); }
+.ev-dist { font-size:12px; font-weight:700; padding:3px 8px; border-radius:8px; flex-shrink:0; }
+.ev-dist.run { background:rgba(52,199,89,.1); color:#1a8a3c; }
+.ev-dist.hyrox { background:rgba(0,122,255,.1); color:#005ec4; }
+.ev-dist.deka { background:rgba(255,149,0,.1); color:#b36800; }
+.no-events { font-size:13px; color:var(--text3); text-align:center; padding:16px 0; }
+
+/* PROFILE PANEL */
+.prof-panel { position:fixed; inset:0; background:var(--bg); z-index:100; overflow-y:auto; transform:translateY(100%); transition:transform .35s cubic-bezier(.32,.72,0,1); }
+.prof-panel.open { transform:none; }
+.prof-body { padding:0 0 calc(100px + var(--safe-b)); }
+.trainer-hero { background:var(--surface); padding:40px 24px 28px; border-bottom:1px solid var(--border); }
+.trainer-avatar { width:64px; height:64px; border-radius:50%; background:#111; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700; color:#fff; margin-bottom:14px; letter-spacing:-1px; }
+.trainer-name-big { font-size:24px; font-weight:700; color:var(--text); letter-spacing:-.5px; margin-bottom:3px; }
+.trainer-role { font-size:14px; color:var(--text3); margin-bottom:16px; }
+.trainer-sports { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; }
+.t-sport { font-size:11px; font-weight:600; padding:4px 10px; border-radius:8px; }
+.trainer-bio { font-size:14px; color:var(--text2); line-height:1.65; }
+.contact-section { padding:16px; }
+.contact-lbl { font-size:11px; font-weight:700; color:var(--text3); letter-spacing:.7px; text-transform:uppercase; padding:4px 4px 10px; }
+.contact-card { background:var(--surface); border-radius:var(--r); border:1px solid var(--border); overflow:hidden; }
+.contact-row { display:flex; align-items:center; gap:12px; padding:14px 16px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .12s; text-decoration:none; }
+.contact-row:last-child { border-bottom:none; }
+.contact-row:active { background:var(--bg); }
+.cr-icon { width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.cr-label { font-size:15px; font-weight:500; color:var(--text); flex:1; }
+.cr-arrow { font-size:16px; color:var(--border); }
 </style>
 </head>
 <body>
@@ -205,25 +263,80 @@ body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--bg); col
   </div>
 
   <nav class="bnav">
-    <div class="bni on" onclick="scrollToToday()">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="2" fill="#ff3b30"/><rect x="13" y="3" width="8" height="8" rx="2" fill="#ff3b30" opacity=".25"/><rect x="3" y="13" width="8" height="8" rx="2" fill="#ff3b30" opacity=".25"/><rect x="13" y="13" width="8" height="8" rx="2" fill="#ff3b30" opacity=".25"/></svg>
+    <div class="bni on" id="bni-hoy" onclick="navTo('hoy')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="2" fill="#007aff"/><rect x="13" y="3" width="8" height="8" rx="2" fill="#007aff" opacity=".25"/><rect x="3" y="13" width="8" height="8" rx="2" fill="#007aff" opacity=".25"/><rect x="13" y="13" width="8" height="8" rx="2" fill="#007aff" opacity=".25"/></svg>
       <span class="bni-l" style="color:var(--accent)">Hoy</span>
     </div>
-    <div class="bni">
+    <div class="bni" id="bni-mes" onclick="navTo('mes')">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="2" stroke="#bbb" stroke-width="1.5"/><line x1="3" y1="9" x2="21" y2="9" stroke="#bbb" stroke-width="1.5"/><line x1="8" y1="2" x2="8" y2="6" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/><line x1="16" y1="2" x2="16" y2="6" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>
       <span class="bni-l">Mes</span>
     </div>
-    <div class="bni">
+    <div class="bni" id="bni-prog" onclick="navTo('prog')">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polyline points="3,18 8,12 13,15 18,8 21,10" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <span class="bni-l">Progreso</span>
     </div>
-    <div class="bni">
+    <div class="bni" id="bni-perf" onclick="navTo('perf')">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#bbb" stroke-width="1.5"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>
       <span class="bni-l">Perfil</span>
     </div>
   </nav>
 </div>
 
+
+<!-- PROGRESS PANEL -->
+<div class="prog-panel" id="progPanel">
+  <div class="prog-hdr">
+    <div class="prog-title">Progreso</div>
+    <div class="prog-sub" id="progSubLabel">Este mes</div>
+  </div>
+  <div class="prog-body" id="progBody">
+    <div class="load-state">Cargando<div class="load-bar"><div class="load-fill"></div></div></div>
+  </div>
+</div>
+
+<!-- PROFILE PANEL -->
+<div class="prof-panel" id="profPanel">
+  <div class="prof-body">
+    <div class="trainer-hero">
+      <div class="trainer-avatar">M</div>
+      <div class="trainer-name-big">Mario</div>
+      <div class="trainer-role">Entrenador personal</div>
+      <div class="trainer-sports">
+        <span class="t-sport" style="background:rgba(52,199,89,.1);color:#1a8a3c">Running</span>
+        <span class="t-sport" style="background:rgba(0,122,255,.1);color:#005ec4">Hyrox</span>
+        <span class="t-sport" style="background:rgba(255,149,0,.1);color:#b36800">Deka</span>
+        <span class="t-sport" style="background:rgba(255,149,0,.1);color:#b36800">Crossfit</span>
+      </div>
+      <div class="trainer-bio">Especialista en deportes de resistencia funcional. Atleta y entrenador de Hyrox, Deka Fit, Running y Crossfit. Planificación personalizada para cada nivel y objetivo.</div>
+    </div>
+    <div class="contact-section">
+      <div class="contact-lbl">Contacto</div>
+      <div class="contact-card">
+        <a class="contact-row" href="https://www.instagram.com" target="_blank">
+          <div class="cr-icon" style="background:rgba(214,41,118,.1)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="4" stroke="#d62976" stroke-width="1.5"/><circle cx="9" cy="9" r="3.5" stroke="#d62976" stroke-width="1.5"/><circle cx="13" cy="5" r="1" fill="#d62976"/></svg>
+          </div>
+          <span class="cr-label">Instagram</span>
+          <span class="cr-arrow">›</span>
+        </a>
+        <a class="contact-row" href="https://wa.me/34600000000" target="_blank">
+          <div class="cr-icon" style="background:rgba(37,211,102,.1)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2C5.13 2 2 5.13 2 9c0 1.37.38 2.65 1.02 3.75L2 16l3.37-1.01A6.96 6.96 0 009 16c3.87 0 7-3.13 7-7s-3.13-7-7-7z" stroke="#25d366" stroke-width="1.5" fill="none"/><path d="M6.5 7.5s.5 1 1.5 2 2 1.5 2 1.5l1-1s.5-.5 1 0l1 1c.5.5 0 1.5-1 2s-2.5.5-4-1-2-2.5-1-4c.5-1 1.5-1.5 2-1L9.5 8c.5.5 0 1-.5.5" stroke="#25d366" stroke-width="1.2" fill="none"/></svg>
+          </div>
+          <span class="cr-label">WhatsApp</span>
+          <span class="cr-arrow">›</span>
+        </a>
+        <a class="contact-row" href="mailto:entrenador@train.com">
+          <div class="cr-icon" style="background:rgba(0,122,255,.1)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="10" rx="2" stroke="#007aff" stroke-width="1.5"/><polyline points="2,5 9,10 16,5" stroke="#007aff" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <span class="cr-label">Email</span>
+          <span class="cr-arrow">›</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="det-panel" id="detPanel">
   <div class="det-hdr">
     <div class="det-back" onclick="closeDetail()">
@@ -265,7 +378,7 @@ const firebaseConfig = {
 };
 // ============================================================
 
-const ACCESS_PASSWORD = "ironhawk"; // 🔑 Cambia esto
+const ACCESS_PASSWORD = "ironhawk";
 
 const fireApp = initializeApp(firebaseConfig);
 const db = getFirestore(fireApp);
@@ -429,7 +542,7 @@ window.openDet = function(w) {
   document.getElementById('dSpPill').className = `det-sp-pill ${sc}`;
   document.getElementById('dDate').textContent = `${DF[dt.getDay()]}, ${d} de ${MN[mo]}`;
   document.getElementById('dTitle').textContent = w.title || 'Entrenamiento';
-  const ic = {baja:'var(--run)',media:'var(--deka)',alta:'var(--accent)',maxima:'var(--accent)'}[w.intensity]||'var(--deka)';
+  const ic = {baja:'var(--run)',media:'var(--deka)',alta:'#ff9500',maxima:'#ff9500'}[w.intensity]||'var(--deka)';
   const iv = {baja:'Suave',media:'Moderado',alta:'Alta',maxima:'Máxima'}[w.intensity]||'Moderado';
   document.getElementById('dStats').innerHTML = `
     <div class="dstat"><div class="dstat-l">Duración</div><div class="dstat-v">${w.duration||'—'}</div></div>
@@ -448,6 +561,158 @@ window.openDet = function(w) {
 };
 
 window.closeDetail = function() { document.getElementById('detPanel').classList.remove('open'); document.body.style.overflow=''; };
+
+
+// ── NAV ──
+let curNav = 'hoy';
+window.navTo = function(tab) {
+  curNav = tab;
+  ['hoy','mes','prog','perf'].forEach(t => {
+    const btn = document.getElementById('bni-'+t);
+    if (!btn) return;
+    btn.classList.remove('on');
+    btn.querySelector('.bni-l').style.color = '';
+  });
+  const activeBtn = document.getElementById('bni-'+tab);
+  if (activeBtn) { activeBtn.classList.add('on'); activeBtn.querySelector('.bni-l').style.color = 'var(--accent)'; }
+  document.getElementById('progPanel').classList.remove('open');
+  document.getElementById('profPanel').classList.remove('open');
+  document.body.style.overflow = '';
+  if (tab === 'hoy') { scrollToToday(); }
+  else if (tab === 'mes') { openMM(); }
+  else if (tab === 'prog') { openProg(); }
+  else if (tab === 'perf') { openProf(); }
+};
+
+// ── PROGRESS ──
+window.openProg = function() {
+  document.getElementById('progPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  buildProgress();
+};
+
+async function buildProgress() {
+  const body = document.getElementById('progBody');
+  body.innerHTML = '<div class="load-state">Calculando<div class="load-bar"><div class="load-fill"></div></div></div>';
+  let pw = wods;
+  if (!pw.length) {
+    try {
+      const ms = `${Y}-${String(M+1).padStart(2,'0')}`;
+      const snap = await getDocs(query(collection(db,'wods'), where('month','==',ms)));
+      pw = []; snap.forEach(d => pw.push({id:d.id,...d.data()}));
+    } catch(e) { pw = demo(); }
+  }
+  document.getElementById('progSubLabel').textContent = `${MN[M]} ${Y}`;
+
+  // ── Carga semanal (nº sesiones por semana del mes) ──
+  const weekLoad = [0,0,0,0,0];
+  const intWeight = {baja:1, media:2, alta:3, maxima:4};
+  const weekIntensity = [0,0,0,0,0];
+  pw.forEach(w => {
+    const d = parseInt(w.date.split('-')[2]);
+    const wi = Math.min(Math.floor((d-1)/7), 4);
+    weekLoad[wi]++;
+    weekIntensity[wi] += intWeight[w.intensity] || 2;
+  });
+
+  // ── KM por semana (solo running, extrae km del campo main/title) ──
+  const weekKm = [0,0,0,0,0];
+  pw.filter(w => w.sport === 'running').forEach(w => {
+    const d = parseInt(w.date.split('-')[2]);
+    const wi = Math.min(Math.floor((d-1)/7), 4);
+    const txt = (w.main||'') + ' ' + (w.title||'') + ' ' + (w.duration||'');
+    const kmMatch = txt.match(/(\d+(?:\.\d+)?)\s*km/i);
+    const minMatch = txt.match(/(\d+)[\s']/);
+    let km = 0;
+    if (kmMatch) km = parseFloat(kmMatch[1]);
+    else if (minMatch) km = Math.round(parseFloat(minMatch[1]) / 5.5);
+    weekKm[wi] += km;
+  });
+
+  // ── Próximos eventos (WODs con tipo "Carrera" o "Competición") ──
+  const now = new Date();
+  const upcomingWods = pw.filter(w => {
+    const wDate = new Date(w.date);
+    return wDate >= now && (
+      (w.type||'').toLowerCase().includes('compet') ||
+      (w.type||'').toLowerCase().includes('carrera') ||
+      (w.type||'').toLowerCase().includes('race') ||
+      (w.title||'').toLowerCase().includes('carrera') ||
+      (w.title||'').toLowerCase().includes('media maratón') ||
+      (w.title||'').toLowerCase().includes('simulacro')
+    );
+  }).sort((a,b) => a.date.localeCompare(b.date)).slice(0, 5);
+
+  const maxLoad = Math.max(...weekLoad, 1);
+  const maxKm = Math.max(...weekKm, 1);
+  const sportColors = {running:'var(--run)',hyrox:'var(--hyrox)',deka:'var(--deka)',crossfit:'var(--crossfit)'};
+  const sportLabels = {running:'Running',hyrox:'Hyrox',deka:'Deka',crossfit:'CrossFit'};
+
+  let html = '';
+
+  // ── GRÁFICO CARGA ──
+  html += '<div class="pcard">';
+  html += '<div class="section-hdr">Carga de entrenamiento — sesiones por semana</div>';
+  html += '<div class="bar-chart">';
+  weekLoad.forEach((v, i) => {
+    const h = Math.max(Math.round((v / maxLoad) * 80), v > 0 ? 6 : 2);
+    const intensity = weekIntensity[i];
+    const col = intensity > 8 ? 'var(--deka)' : intensity > 4 ? 'var(--hyrox)' : intensity > 0 ? 'var(--hyrox)' : 'var(--border)';
+    html += `<div class="bc-col">
+      <div class="bc-bar-wrap"><div class="bc-bar" style="height:${h}px;background:${col}"></div></div>
+      ${v > 0 ? `<span class="bc-val">${v}</span>` : ''}
+      <span class="bc-lbl">S${i+1}</span>
+    </div>`;
+  });
+  html += '</div></div>';
+
+  // ── GRÁFICO KM ──
+  const totalKm = weekKm.reduce((a,b)=>a+b,0);
+  if (totalKm > 0) {
+    html += '<div class="pcard">';
+    html += `<div class="section-hdr">Kilómetros running — total ${Math.round(totalKm)} km este mes</div>`;
+    html += '<div class="km-chart">';
+    weekKm.forEach((v, i) => {
+      const h = Math.max(Math.round((v / maxKm) * 80), v > 0 ? 6 : 2);
+      html += `<div class="bc-col">
+        <div class="bc-bar-wrap"><div class="bc-bar" style="height:${h}px;background:${v>0?'var(--run)':'var(--border)'}"></div></div>
+        ${v > 0 ? `<span class="bc-val">${Math.round(v)}</span>` : ''}
+        <span class="bc-lbl">S${i+1}</span>
+      </div>`;
+    });
+    html += '</div></div>';
+  }
+
+  // ── PRÓXIMOS EVENTOS ──
+  html += '<div class="pcard">';
+  html += '<div class="section-hdr">Próximos eventos y competiciones</div>';
+  if (upcomingWods.length === 0) {
+    html += '<div class="no-events">No hay eventos próximos este mes</div>';
+  } else {
+    upcomingWods.forEach(w => {
+      const pts = w.date.split('-');
+      const d = parseInt(pts[2]), mo = parseInt(pts[1])-1;
+      const sc = {running:'run',hyrox:'hyrox',deka:'deka',crossfit:'crossfit'}[w.sport]||'run';
+      html += `<div class="event-row">
+        <div class="event-date-box"><span class="ev-day">${d}</span><span class="ev-mon">${MS[mo]}</span></div>
+        <div class="event-info">
+          <div class="ev-name">${w.title||'Evento'}</div>
+          <div class="ev-meta">${sportLabels[w.sport]||w.sport}${w.duration?' · '+w.duration:''}</div>
+        </div>
+        <span class="ev-dist ${sc}">${sportLabels[w.sport]||w.sport}</span>
+      </div>`;
+    });
+  }
+  html += '</div>';
+
+  body.innerHTML = html;
+}
+
+// ── PROFILE ──
+window.openProf = function() {
+  document.getElementById('profPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
 
 function spc(s) { return {running:'run',hyrox:'hyrox',deka:'deka',crossfit:'crossfit'}[s]||'run'; }
 function spl(s) { return {running:'Running',hyrox:'Hyrox',deka:'Deka',crossfit:'CrossFit'}[s]||s; }
