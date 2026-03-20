@@ -2,252 +2,259 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRAIN — Tu planificación de entrenamientos</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f5f5f3">
+<title>TRAIN.</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #0a0a0a;
-    --dark: #111318;
-    --card: #181c24;
-    --border: #252a35;
-    --red: #e8212e;
-    --red-dim: #7a1118;
-    --orange: #ff6b00;
-    --gold: #f5c842;
-    --white: #f0eeea;
-    --muted: #8a8f9e;
-    --green: #2ecc71;
-    --blue: #4fa3e0;
-    --purple: #9b59b6;
-    --teal: #1abc9c;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--black); color:var(--white); font-family:'Barlow',sans-serif; min-height:100vh; overflow-x:hidden; }
-  body::before {
-    content:''; position:fixed; inset:0;
-    background:
-      repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(232,33,46,0.025) 40px,rgba(232,33,46,0.025) 41px),
-      repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(232,33,46,0.025) 40px,rgba(232,33,46,0.025) 41px);
-    pointer-events:none; z-index:0;
-  }
+:root {
+  --bg: #f5f5f3;
+  --surface: #ffffff;
+  --border: #ebebea;
+  --text: #111111;
+  --text2: #555555;
+  --text3: #999999;
+  --accent: #ff3b30;
+  --run: #34c759;
+  --hyrox: #007aff;
+  --deka: #ff9500;
+  --crossfit: #ff3b30;
+  --r: 20px;
+  --rsm: 12px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--bg); color:var(--text); min-height:100dvh; overflow-x:hidden; }
 
-  /* LOGIN SCREEN */
-  .login-screen {
-    position:fixed; inset:0; background:var(--black); z-index:200;
-    display:flex; align-items:center; justify-content:center;
-    flex-direction:column; gap:0;
-  }
-  .login-screen.hidden { display:none; }
-  .login-box {
-    background:var(--dark); border:1px solid var(--border); border-top:3px solid var(--red);
-    padding:40px 48px; width:100%; max-width:400px;
-  }
-  .login-logo { font-family:'Bebas Neue',sans-serif; font-size:52px; line-height:1; margin-bottom:4px; letter-spacing:2px; }
-  .login-logo span { color:var(--red); }
-  .login-sub { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--muted); margin-bottom:36px; }
-  .login-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:8px; }
-  .login-input {
-    width:100%; background:rgba(255,255,255,0.04); border:1px solid var(--border);
-    border-radius:2px; padding:12px 16px; color:var(--white); font-family:'Barlow',sans-serif; font-size:15px;
-    outline:none; transition:border-color .2s; margin-bottom:24px;
-  }
-  .login-input:focus { border-color:var(--red-dim); }
-  .login-btn {
-    width:100%; background:var(--red); border:none; color:var(--white); font-family:'Bebas Neue',sans-serif;
-    font-size:22px; letter-spacing:3px; padding:13px; cursor:pointer; transition:background .15s;
-  }
-  .login-btn:hover { background:#c5131f; }
-  .login-error { font-size:12px; color:var(--red); font-family:'Barlow Condensed',sans-serif; letter-spacing:1px; margin-top:12px; display:none; }
-  .login-error.show { display:block; }
+/* LOGIN */
+.login-screen { position:fixed; inset:0; background:var(--surface); z-index:300; display:flex; align-items:center; justify-content:center; padding:32px 28px; }
+.login-screen.out { animation:fadeOut .25s ease forwards; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
+@keyframes fadeOut { to{opacity:0;transform:translateY(-8px)} }
+.li { width:100%; max-width:360px; animation:fadeIn .35s ease; }
+.li-logo { font-size:54px; font-weight:700; letter-spacing:-2.5px; line-height:1; margin-bottom:4px; }
+.li-logo span { color:var(--accent); }
+.li-sub { font-size:15px; color:var(--text3); margin-bottom:44px; }
+.li-label { font-size:11px; font-weight:700; color:var(--text3); letter-spacing:.6px; text-transform:uppercase; display:block; margin-bottom:8px; }
+.li-input { width:100%; background:var(--bg); border:1.5px solid var(--border); border-radius:var(--rsm); padding:15px 16px; font-family:'DM Sans',sans-serif; font-size:16px; color:var(--text); outline:none; margin-bottom:12px; transition:border-color .2s; }
+.li-input:focus { border-color:var(--text); }
+.li-btn { width:100%; background:var(--text); border:none; color:#fff; border-radius:var(--rsm); padding:16px; font-family:'DM Sans',sans-serif; font-size:16px; font-weight:600; cursor:pointer; transition:opacity .15s; }
+.li-btn:active { opacity:.85; }
+.li-err { font-size:13px; color:var(--accent); margin-top:10px; display:none; font-weight:500; }
+.li-err.show { display:block; }
 
-  /* HEADER */
-  header {
-    position:relative; z-index:10;
-    padding:28px 32px 0;
-    display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap;
-  }
-  .logo-eyebrow { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--red); font-weight:600; margin-bottom:4px; }
-  h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(44px,7vw,88px); line-height:.9; letter-spacing:2px; }
-  h1 span { color:var(--red); }
-  .header-right { display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
-  .month-display { font-family:'Bebas Neue',sans-serif; font-size:clamp(22px,4vw,44px); color:var(--muted); letter-spacing:2px; text-transform:uppercase; line-height:1; }
+/* APP */
+.app { display:none; flex-direction:column; min-height:100dvh; }
+.app.on { display:flex; }
 
-  /* SPORT FILTER */
-  .sport-nav {
-    position:relative; z-index:10;
-    padding:20px 32px 0;
-    display:flex; gap:8px; flex-wrap:wrap; align-items:center;
-  }
-  .sport-btn {
-    font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase;
-    font-weight:700; padding:7px 16px; border:1px solid var(--border); background:transparent;
-    color:var(--muted); cursor:pointer; transition:all .15s; border-radius:2px;
-  }
-  .sport-btn:hover { border-color:var(--red-dim); color:var(--white); }
-  .sport-btn.active { background:var(--red); border-color:var(--red); color:var(--white); }
-  .sport-btn[data-sport="running"].active { background:var(--green); border-color:var(--green); color:#0a0a0a; }
-  .sport-btn[data-sport="hyrox"].active { background:var(--blue); border-color:var(--blue); color:var(--white); }
-  .sport-btn[data-sport="deka"].active { background:var(--orange); border-color:var(--orange); color:var(--white); }
-  .month-nav-btns { margin-left:auto; display:flex; gap:6px; align-items:center; }
-  .mnav { background:transparent; border:1px solid var(--border); color:var(--muted); width:32px; height:32px; cursor:pointer; font-size:16px; transition:all .15s; }
-  .mnav:hover { border-color:var(--red); color:var(--white); }
-  .mnav-label { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; min-width:80px; text-align:center; }
+/* TOP HEADER */
+.top-header { background:var(--surface); padding:52px 24px 0; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:40; }
+.header-row { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:12px; }
+.greeting { font-size:13px; color:var(--text3); margin-bottom:1px; }
+.logo { font-size:32px; font-weight:700; letter-spacing:-1.5px; line-height:1; }
+.logo span { color:var(--accent); }
+.month-pill { display:flex; align-items:center; gap:5px; font-size:13px; font-weight:600; color:var(--text2); background:var(--bg); border:1px solid var(--border); border-radius:20px; padding:7px 13px; cursor:pointer; transition:all .15s; }
+.month-pill:active { background:var(--border); }
 
-  /* LEGEND */
-  .legend {
-    background:var(--card); border:1px solid var(--border); border-left:3px solid var(--red);
-    padding:12px 20px; margin:16px 32px 0;
-    display:flex; flex-wrap:wrap; gap:8px 20px; position:relative; z-index:5;
-  }
-  .legend-item { font-size:12px; color:var(--muted); font-family:'Barlow Condensed',sans-serif; letter-spacing:.5px; display:flex; align-items:center; gap:6px; }
-  .legend-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+/* WEEK STRIP */
+.week-strip { display:flex; gap:2px; padding:0 20px 14px; overflow-x:auto; scrollbar-width:none; }
+.week-strip::-webkit-scrollbar { display:none; }
+.wd { flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:4px; padding:7px 10px; border-radius:16px; cursor:pointer; transition:background .15s; min-width:44px; }
+.wd.sel { background:var(--text); }
+.wd-n { font-size:10px; font-weight:600; color:var(--text3); text-transform:uppercase; }
+.wd.sel .wd-n { color:rgba(255,255,255,.5); }
+.wd-d { font-size:18px; font-weight:700; color:var(--text); line-height:1; letter-spacing:-.5px; }
+.wd.sel .wd-d { color:#fff; }
+.wd.tod:not(.sel) .wd-d { color:var(--accent); }
+.wd-dot { width:5px; height:5px; border-radius:50%; background:var(--border); }
+.wd-dot.run{background:var(--run)} .wd-dot.hyrox{background:var(--hyrox)} .wd-dot.deka{background:var(--deka)} .wd-dot.crossfit{background:var(--crossfit)}
 
-  /* CALENDAR */
-  .calendar { padding:24px 32px; position:relative; z-index:5; }
-  .week-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--red); font-weight:600; margin-bottom:8px; margin-top:24px; }
-  .week-label:first-child { margin-top:0; }
-  .days-row { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-bottom:6px; }
-  @media(max-width:900px){ .days-row { grid-template-columns:repeat(4,1fr); } }
-  @media(max-width:540px){ .days-row { grid-template-columns:repeat(2,1fr); } }
+/* FILTERS */
+.filter-row { display:flex; gap:6px; padding:12px 24px; overflow-x:auto; scrollbar-width:none; background:var(--surface); border-bottom:1px solid var(--border); }
+.filter-row::-webkit-scrollbar { display:none; }
+.fp { flex-shrink:0; font-size:13px; font-weight:500; padding:7px 16px; border-radius:20px; background:var(--bg); color:var(--text2); border:1px solid var(--border); cursor:pointer; transition:all .15s; white-space:nowrap; }
+.fp.on { background:var(--text); color:#fff; border-color:var(--text); }
+.fp[data-s="running"].on{background:var(--run);border-color:var(--run);}
+.fp[data-s="hyrox"].on{background:var(--hyrox);border-color:var(--hyrox);}
+.fp[data-s="deka"].on{background:var(--deka);border-color:var(--deka);}
 
-  .day-card { background:var(--card); border:1px solid var(--border); border-radius:2px; overflow:hidden; cursor:pointer; transition:transform .15s,border-color .15s; position:relative; }
-  .day-card:hover { transform:translateY(-2px); border-color:var(--red-dim); }
-  .day-card.rest { opacity:.35; cursor:default; pointer-events:none; }
-  .day-card.empty-day { opacity:.2; cursor:default; pointer-events:none; }
-  .day-card.today .day-num { color:var(--red); }
-  .day-card.today .day-header { background:rgba(232,33,46,0.08); }
-  .day-header { display:flex; justify-content:space-between; align-items:center; padding:6px 10px; background:rgba(255,255,255,0.03); border-bottom:1px solid var(--border); }
-  .day-name { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:600; }
-  .day-num { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--white); line-height:1; }
-  .day-body { padding:10px; min-height:72px; }
-  .tag { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:2px 6px; border-radius:1px; margin-bottom:5px; font-weight:700; }
-  .tag-hyrox  { background:rgba(79,163,224,0.15); color:var(--blue); }
-  .tag-running{ background:rgba(46,204,113,0.15); color:var(--green); }
-  .tag-deka   { background:rgba(255,107,0,0.15); color:var(--orange); }
-  .tag-rest   { background:rgba(138,143,158,0.1); color:var(--muted); }
-  .tag-crossfit{ background:rgba(232,33,46,0.15); color:var(--red); }
-  .day-desc { font-size:11px; color:var(--muted); line-height:1.45; }
-  .difficulty { display:inline-flex; align-items:center; gap:4px; font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:1px; text-transform:uppercase; padding:2px 7px; border-radius:10px; font-weight:700; margin-top:4px; }
-  .diff-easy   { background:rgba(46,204,113,0.12); color:var(--green); }
-  .diff-medium { background:rgba(245,200,66,0.12); color:var(--gold); }
-  .diff-hard   { background:rgba(232,33,46,0.12); color:var(--red); }
+/* SCROLL */
+.main-scroll { flex:1; overflow-y:auto; padding-bottom:calc(80px + var(--safe-b)); }
+.cards-area { padding:0 16px; }
+.day-lbl { font-size:11px; font-weight:700; color:var(--text3); letter-spacing:.7px; text-transform:uppercase; padding:16px 8px 8px; }
 
-  /* LOADING */
-  .loading-state { text-align:center; padding:60px 32px; color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:3px; text-transform:uppercase; }
-  .loading-bar { width:120px; height:2px; background:var(--border); margin:12px auto 0; overflow:hidden; }
-  .loading-bar-inner { width:40%; height:100%; background:var(--red); animation:loadpulse 1.2s ease-in-out infinite; }
-  @keyframes loadpulse { 0%{transform:translateX(-100%)} 100%{transform:translateX(350%)} }
-  .empty-month { text-align:center; padding:60px 32px; color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; }
+/* WOD CARD */
+.wod-card { background:var(--surface); border-radius:var(--r); border:1px solid var(--border); overflow:hidden; margin-bottom:10px; cursor:pointer; transition:transform .12s; animation:sup .25s ease both; }
+@keyframes sup { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+.wod-card:active { transform:scale(.984); }
+.wc-bar { height:3px; }
+.wc-bar.run{background:var(--run)} .wc-bar.hyrox{background:var(--hyrox)} .wc-bar.deka{background:var(--deka)} .wc-bar.crossfit{background:var(--crossfit)}
+.wc-in { padding:16px 18px 18px; }
+.wc-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.wc-sp { display:flex; align-items:center; gap:6px; }
+.wc-sd { width:7px; height:7px; border-radius:50%; }
+.wc-sd.run{background:var(--run)} .wc-sd.hyrox{background:var(--hyrox)} .wc-sd.deka{background:var(--deka)} .wc-sd.crossfit{background:var(--crossfit)}
+.wc-sn { font-size:11px; font-weight:700; letter-spacing:.5px; text-transform:uppercase; }
+.wc-sn.run{color:var(--run)} .wc-sn.hyrox{color:var(--hyrox)} .wc-sn.deka{color:var(--deka)} .wc-sn.crossfit{color:var(--crossfit)}
+.wc-int { font-size:11px; font-weight:500; padding:3px 9px; border-radius:8px; }
+.i-baja{background:rgba(52,199,89,.1);color:#1a8a3c} .i-media{background:rgba(255,149,0,.1);color:#b36800} .i-alta,.i-maxima{background:rgba(255,59,48,.1);color:var(--accent)}
+.wc-title { font-size:20px; font-weight:700; color:var(--text); letter-spacing:-.5px; line-height:1.2; margin-bottom:12px; }
+.wc-chips { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:13px; }
+.chip { font-size:12px; font-weight:500; padding:4px 10px; border-radius:8px; background:var(--bg); color:var(--text2); }
+.wc-div { height:1px; background:var(--bg); margin-bottom:13px; }
+.wc-prev { display:flex; flex-direction:column; gap:6px; margin-bottom:15px; }
+.wcp { display:flex; gap:8px; align-items:flex-start; font-size:13px; color:var(--text2); line-height:1.5; }
+.wcp-dot { width:4px; height:4px; border-radius:50%; background:var(--border); flex-shrink:0; margin-top:6px; }
+.wc-btn { width:100%; background:var(--text); color:#fff; border:none; border-radius:var(--rsm); padding:13px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; cursor:pointer; transition:opacity .15s; }
+.wc-btn:active { opacity:.85; }
 
-  /* MODAL */
-  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(4px); z-index:100; align-items:center; justify-content:center; padding:20px; }
-  .modal-overlay.open { display:flex; }
-  .modal { background:var(--dark); border:1px solid var(--border); border-top:3px solid var(--red); max-width:560px; width:100%; max-height:88vh; overflow-y:auto; animation:slideUp .25s ease; }
-  @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-  .modal-header { padding:22px 28px 14px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:flex-start; }
-  .modal-date { font-family:'Bebas Neue',sans-serif; font-size:38px; line-height:1; }
-  .modal-day { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; color:var(--red); text-transform:uppercase; font-weight:600; margin-top:2px; }
-  .modal-close { background:none; border:none; color:var(--muted); font-size:24px; cursor:pointer; padding:4px 8px; transition:color .15s; }
-  .modal-close:hover { color:var(--white); }
-  .modal-body { padding:20px 28px 28px; }
-  .modal-sport-tag { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:700; padding:4px 12px; border:1px solid; margin-bottom:16px; }
-  .modal-sport-hyrox  { border-color:var(--blue); color:var(--blue); }
-  .modal-sport-running{ border-color:var(--green); color:var(--green); }
-  .modal-sport-deka   { border-color:var(--orange); color:var(--orange); }
-  .modal-sport-crossfit{ border-color:var(--red); color:var(--red); }
-  .modal-diff-row { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
-  .tip-box { background:rgba(79,163,224,0.06); border:1px solid rgba(79,163,224,0.2); border-left:3px solid var(--blue); padding:12px 16px; margin-bottom:18px; font-size:13px; color:var(--muted); line-height:1.6; }
-  .tip-box strong { color:var(--blue); font-family:'Barlow Condensed',sans-serif; letter-spacing:1px; text-transform:uppercase; display:block; margin-bottom:4px; font-size:11px; }
-  .workout-block { margin-bottom:16px; }
-  .workout-title { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--muted); margin-bottom:8px; font-weight:600; }
-  .workout-item { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; color:var(--white); line-height:1.55; }
-  .workout-item:last-child { border-bottom:none; }
-  .workout-bullet { width:5px; height:5px; border-radius:50%; background:var(--red); flex-shrink:0; margin-top:6px; }
-  .stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:18px; }
-  .stat-box { background:rgba(255,255,255,0.04); border:1px solid var(--border); padding:10px; }
-  .stat-label { font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
-  .stat-val { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--white); line-height:1; }
+/* REST */
+.rest-card { background:var(--surface); border-radius:var(--r); border:1px solid var(--border); padding:16px 18px; margin-bottom:10px; display:flex; align-items:center; gap:12px; opacity:.45; }
+.rest-ic { width:36px; height:36px; border-radius:10px; background:var(--bg); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.rest-t { font-size:14px; font-weight:500; color:var(--text2); }
+.rest-s { font-size:12px; color:var(--text3); margin-top:1px; }
 
-  ::-webkit-scrollbar { width:4px; }
-  ::-webkit-scrollbar-track { background:var(--black); }
-  ::-webkit-scrollbar-thumb { background:var(--red-dim); }
+/* LOADING */
+.load-state { text-align:center; padding:64px 24px; color:var(--text3); font-size:14px; }
+.load-bar { width:80px; height:2px; background:var(--border); margin:12px auto 0; border-radius:2px; overflow:hidden; }
+.load-fill { height:100%; background:var(--accent); animation:lp 1.2s ease-in-out infinite; }
+@keyframes lp { 0%{transform:translateX(-100%)} 100%{transform:translateX(350%)} }
 
-  .app-content { display:none; }
-  .app-content.visible { display:block; }
+/* BOTTOM NAV */
+.bnav { position:fixed; bottom:0; left:0; right:0; background:var(--surface); border-top:1px solid var(--border); display:flex; justify-content:space-around; padding:10px 0 calc(12px + var(--safe-b)); z-index:50; }
+.bni { display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:3px 16px; }
+.bni-l { font-size:10px; font-weight:500; color:var(--text3); }
+.bni.on .bni-l { color:var(--accent); }
+
+/* DETAIL PANEL */
+.det-panel { position:fixed; inset:0; background:var(--bg); z-index:100; overflow-y:auto; transform:translateY(100%); transition:transform .35s cubic-bezier(.32,.72,0,1); }
+.det-panel.open { transform:none; }
+.det-hdr { background:var(--surface); padding:52px 24px 20px; border-bottom:1px solid var(--border); }
+.det-back { display:flex; align-items:center; gap:4px; font-size:15px; font-weight:500; color:var(--accent); cursor:pointer; margin-bottom:14px; width:fit-content; }
+.det-sp-row { display:flex; align-items:center; gap:8px; margin-bottom:5px; flex-wrap:wrap; }
+.det-sp-pill { font-size:11px; font-weight:700; padding:3px 10px; border-radius:8px; text-transform:uppercase; letter-spacing:.4px; }
+.det-sp-pill.run{background:rgba(52,199,89,.12);color:#1a8a3c} .det-sp-pill.hyrox{background:rgba(0,122,255,.1);color:#005ec4} .det-sp-pill.deka{background:rgba(255,149,0,.1);color:#b36800} .det-sp-pill.crossfit{background:rgba(255,59,48,.1);color:var(--accent)}
+.det-date { font-size:13px; color:var(--text3); }
+.det-title { font-size:28px; font-weight:700; color:var(--text); letter-spacing:-1px; line-height:1.1; margin-bottom:14px; }
+.det-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.dstat { background:var(--bg); border-radius:12px; padding:10px 12px; }
+.dstat-l { font-size:10px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.5px; margin-bottom:3px; }
+.dstat-v { font-size:17px; font-weight:700; color:var(--text); letter-spacing:-.5px; }
+.det-body { padding:16px; }
+.note-box { background:rgba(0,122,255,.06); border-radius:16px; padding:14px 16px; margin-bottom:12px; border-left:3px solid var(--hyrox); }
+.note-lbl { font-size:10px; font-weight:700; color:var(--hyrox); text-transform:uppercase; letter-spacing:.5px; margin-bottom:5px; }
+.note-txt { font-size:13px; color:var(--text2); line-height:1.65; }
+.wod-blk { background:var(--surface); border-radius:16px; padding:16px; margin-bottom:10px; border:1px solid var(--border); }
+.blk-lbl { font-size:10px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.6px; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--bg); }
+.blk-item { display:flex; gap:10px; align-items:flex-start; padding:7px 0; border-bottom:1px solid var(--bg); font-size:14px; color:var(--text); line-height:1.55; }
+.blk-item:last-child { border-bottom:none; padding-bottom:0; }
+.blk-n { width:22px; height:22px; border-radius:8px; background:var(--bg); font-size:11px; font-weight:700; color:var(--text3); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+
+/* MONTH MODAL */
+.mm-overlay { position:fixed; inset:0; background:rgba(0,0,0,.3); z-index:200; display:none; align-items:flex-end; justify-content:center; }
+.mm-overlay.open { display:flex; }
+.mm-box { background:var(--surface); border-radius:24px 24px 0 0; padding:20px 24px calc(24px + var(--safe-b)); width:100%; max-width:480px; animation:sup .3s ease; }
+.mm-handle { width:36px; height:4px; background:var(--border); border-radius:2px; margin:0 auto 18px; }
+.mm-yr { font-size:20px; font-weight:700; color:var(--text); letter-spacing:-.5px; margin-bottom:14px; }
+.mm-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.mm-m { padding:11px 8px; border-radius:12px; text-align:center; font-size:13px; font-weight:500; cursor:pointer; border:1px solid var(--border); color:var(--text2); transition:all .15s; }
+.mm-m.on { background:var(--text); color:#fff; border-color:var(--text); }
+.mm-m:active { opacity:.8; }
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
 <div class="login-screen" id="loginScreen">
-  <div class="login-box">
-    <div class="login-logo">TRAIN<span>.</span></div>
-    <div class="login-sub">Acceso exclusivo — introduce tu código</div>
-    <label class="login-label">Código de acceso</label>
-    <input type="password" class="login-input" id="accessCode" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkLogin()">
-    <button class="login-btn" onclick="checkLogin()">ENTRAR</button>
-    <div class="login-error" id="loginError">Código incorrecto. Contacta con tu entrenador.</div>
+  <div class="li">
+    <div class="li-logo">TRAIN<span>.</span></div>
+    <div class="li-sub">Tu plan de entrenamiento</div>
+    <label class="li-label">Código de acceso</label>
+    <input type="password" class="li-input" id="accessCode" placeholder="Introduce tu código" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="li-btn" onclick="doLogin()">Entrar</button>
+    <div class="li-err" id="loginErr">Código incorrecto. Contacta con tu entrenador.</div>
   </div>
 </div>
 
-<!-- APP CONTENT -->
-<div class="app-content" id="appContent">
-
-  <header>
-    <div>
-      <div class="logo-eyebrow">Planificación de entrenamiento</div>
-      <h1 id="appTitle">TRAIN<span>.</span></h1>
+<div class="app" id="app">
+  <div class="top-header">
+    <div class="header-row">
+      <div>
+        <div class="greeting" id="greet">Hola 👋</div>
+        <div class="logo">TRAIN<span>.</span></div>
+      </div>
+      <button class="month-pill" onclick="openMM()">
+        <span id="monthPillTxt">Mar 2026</span>
+        <svg width="11" height="11" viewBox="0 0 11 11" fill="none"><polyline points="2,3.5 5.5,7.5 9,3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+      </button>
     </div>
-    <div class="header-right">
-      <div class="month-display" id="headerMonth">Cargando...</div>
-    </div>
-  </header>
-
-  <div class="sport-nav">
-    <button class="sport-btn active" data-sport="all" onclick="filterSport('all',this)">Todos</button>
-    <button class="sport-btn" data-sport="running" onclick="filterSport('running',this)">🏃 Running</button>
-    <button class="sport-btn" data-sport="hyrox" onclick="filterSport('hyrox',this)">⚡ Hyrox</button>
-    <button class="sport-btn" data-sport="deka" onclick="filterSport('deka',this)">🔥 Deka</button>
-    <div class="month-nav-btns">
-      <button class="mnav" onclick="changeMonth(-1)">‹</button>
-      <span class="mnav-label" id="navMonthLabel">Mar 2026</span>
-      <button class="mnav" onclick="changeMonth(1)">›</button>
-    </div>
+    <div class="week-strip" id="weekStrip"></div>
   </div>
 
-  <div class="legend">
-    <div class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Running</div>
-    <div class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>Hyrox</div>
-    <div class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span>Deka</div>
-    <div class="legend-item"><span class="legend-dot" style="background:var(--muted)"></span>Descanso</div>
+  <div class="filter-row" id="filterRow">
+    <div class="fp on" data-s="all" onclick="setFilter('all',this)">Todos</div>
+    <div class="fp" data-s="running" onclick="setFilter('running',this)">Running</div>
+    <div class="fp" data-s="hyrox" onclick="setFilter('hyrox',this)">Hyrox</div>
+    <div class="fp" data-s="deka" onclick="setFilter('deka',this)">Deka</div>
   </div>
 
-  <div class="calendar" id="calendarContainer">
-    <div class="loading-state">Cargando entrenamientos<div class="loading-bar"><div class="loading-bar-inner"></div></div></div>
+  <div class="main-scroll" id="mainScroll">
+    <div class="load-state">Cargando entrenamientos<div class="load-bar"><div class="load-fill"></div></div></div>
   </div>
 
+  <nav class="bnav">
+    <div class="bni on" onclick="scrollToToday()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="2" fill="#ff3b30"/><rect x="13" y="3" width="8" height="8" rx="2" fill="#ff3b30" opacity=".25"/><rect x="3" y="13" width="8" height="8" rx="2" fill="#ff3b30" opacity=".25"/><rect x="13" y="13" width="8" height="8" rx="2" fill="#ff3b30" opacity=".25"/></svg>
+      <span class="bni-l" style="color:var(--accent)">Hoy</span>
+    </div>
+    <div class="bni">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="2" stroke="#bbb" stroke-width="1.5"/><line x1="3" y1="9" x2="21" y2="9" stroke="#bbb" stroke-width="1.5"/><line x1="8" y1="2" x2="8" y2="6" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/><line x1="16" y1="2" x2="16" y2="6" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="bni-l">Mes</span>
+    </div>
+    <div class="bni">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><polyline points="3,18 8,12 13,15 18,8 21,10" stroke="#bbb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="bni-l">Progreso</span>
+    </div>
+    <div class="bni">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#bbb" stroke-width="1.5"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="#bbb" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span class="bni-l">Perfil</span>
+    </div>
+  </nav>
 </div>
 
-<!-- MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeOnOverlay(event)">
-  <div class="modal">
-    <div class="modal-header">
-      <div><div class="modal-date" id="modalDate"></div><div class="modal-day" id="modalDay"></div></div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+<div class="det-panel" id="detPanel">
+  <div class="det-hdr">
+    <div class="det-back" onclick="closeDetail()">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polyline points="11,3 6,9 11,15" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></svg>
+      Atrás
     </div>
-    <div class="modal-body" id="modalBody"></div>
+    <div class="det-sp-row">
+      <span class="det-sp-pill" id="dSpPill">Running</span>
+      <span class="det-date" id="dDate"></span>
+    </div>
+    <div class="det-title" id="dTitle"></div>
+    <div class="det-stats" id="dStats"></div>
+  </div>
+  <div class="det-body" id="dBody"></div>
+</div>
+
+<div class="mm-overlay" id="mmOverlay" onclick="closeMM(event)">
+  <div class="mm-box">
+    <div class="mm-handle"></div>
+    <div class="mm-yr" id="mmYr">2026</div>
+    <div class="mm-grid" id="mmGrid"></div>
   </div>
 </div>
 
-<!-- Firebase SDK -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  // ============================================================
-  // 🔧 CONFIGURACIÓN FIREBASE — reemplaza con tus datos
-  // ============================================================
+// ============================================================
+// 🔧 CONFIGURACIÓN FIREBASE — pega tus datos aquí
+// ============================================================
 const firebaseConfig = {
   apiKey: "AIzaSyBtMJBfDEwjV9tOZowC4LAoTPjp2rZFO4U",
   authDomain: "mariohyrox.firebaseapp.com",
@@ -256,229 +263,209 @@ const firebaseConfig = {
   messagingSenderId: "23933117714",
   appId: "1:23933117714:web:b1ced10a2fdfef3eb6bfcb"
 };
-  // ============================================================
+// ============================================================
 
-  const ACCESS_PASSWORD = "ironhawk26"; // 🔑 Cambia esta contraseña
+const ACCESS_PASSWORD = "ironhawk"; // 🔑 Cambia esto
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+const fireApp = initializeApp(firebaseConfig);
+const db = getFirestore(fireApp);
 
-  window._db = db;
-  window._firestoreModules = { collection, query, where, getDocs };
+const MN = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const MS = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const DF = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const DS = ['L','M','X','J','V','S','D'];
+const today = new Date();
 
-  // LOGIN
-  window.checkLogin = function() {
-    const val = document.getElementById('accessCode').value;
-    if (val === ACCESS_PASSWORD) {
-      localStorage.setItem('train_auth', '1');
-      document.getElementById('loginScreen').classList.add('hidden');
-      document.getElementById('appContent').classList.add('visible');
-      loadCalendar();
-    } else {
-      document.getElementById('loginError').classList.add('show');
-    }
-  };
+let Y = today.getFullYear(), M = today.getMonth();
+let filter = 'all', wods = [];
 
-  // Auto-login si ya está autenticado
-  if (localStorage.getItem('train_auth') === '1') {
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('appContent').classList.add('visible');
+// LOGIN
+window.doLogin = function() {
+  const v = document.getElementById('accessCode').value;
+  if (v === ACCESS_PASSWORD) {
+    localStorage.setItem('ta','1');
+    const ls = document.getElementById('loginScreen');
+    ls.classList.add('out');
+    setTimeout(() => { ls.style.display='none'; document.getElementById('app').classList.add('on'); }, 240);
+    init();
+  } else {
+    document.getElementById('loginErr').classList.add('show');
+    document.getElementById('accessCode').style.borderColor='var(--accent)';
   }
+};
 
-  // STATE
-  let currentYear = new Date().getFullYear();
-  let currentMonth = new Date().getMonth(); // 0-indexed
-  let allWods = [];
-  let currentFilter = 'all';
+if (localStorage.getItem('ta') === '1') {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').classList.add('on');
+  init();
+}
 
-  const MONTH_NAMES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  const DAY_NAMES   = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-  const today = new Date();
+function init() {
+  const h = today.getHours();
+  document.getElementById('greet').textContent = h<13 ? 'Buenos días ☀️' : h<20 ? 'Buenas tardes 💪' : 'Buenas noches 🌙';
+  buildMM();
+  loadMonth();
+}
 
-  window.filterSport = function(sport, btn) {
-    currentFilter = sport;
-    document.querySelectorAll('.sport-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderCalendar();
-  };
+async function loadMonth() {
+  document.getElementById('mainScroll').innerHTML = '<div class="load-state">Cargando<div class="load-bar"><div class="load-fill"></div></div></div>';
+  document.getElementById('monthPillTxt').textContent = `${MS[M]} ${Y}`;
+  buildStrip();
+  try {
+    const ms = `${Y}-${String(M+1).padStart(2,'0')}`;
+    const snap = await getDocs(query(collection(db,'wods'), where('month','==',ms)));
+    wods = [];
+    snap.forEach(d => wods.push({ id:d.id, ...d.data() }));
+  } catch(e) { wods = demo(); }
+  render();
+}
 
-  window.changeMonth = function(dir) {
-    currentMonth += dir;
-    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-    if (currentMonth < 0)  { currentMonth = 11; currentYear--; }
-    loadCalendar();
-  };
-
-  async function loadCalendar() {
-    const container = document.getElementById('calendarContainer');
-    container.innerHTML = '<div class="loading-state">Cargando entrenamientos<div class="loading-bar"><div class="loading-bar-inner"></div></div></div>';
-
-    const label = `${MONTH_NAMES[currentMonth]} ${currentYear}`;
-    document.getElementById('headerMonth').textContent = label;
-    document.getElementById('navMonthLabel').textContent = `${MONTH_NAMES[currentMonth].slice(0,3)} ${currentYear}`;
-
-    try {
-      const { collection, query, where, getDocs } = window._firestoreModules;
-      const db = window._db;
-      const monthStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}`;
-      const q = query(collection(db,'wods'), where('month','==', monthStr));
-      const snap = await getDocs(q);
-      allWods = [];
-      snap.forEach(doc => allWods.push({ id: doc.id, ...doc.data() }));
-    } catch(e) {
-      console.warn('Firebase error, using demo data', e);
-      allWods = getDemoData();
-    }
-
-    renderCalendar();
-  }
-
-  function renderCalendar() {
-    const container = document.getElementById('calendarContainer');
-    const filtered = currentFilter === 'all' ? allWods : allWods.filter(w => w.sport === currentFilter);
-
-    const firstDay = new Date(currentYear, currentMonth, 1);
-    const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
-    let startDow = firstDay.getDay(); // 0=Sun
-    startDow = startDow === 0 ? 6 : startDow - 1; // Monday=0
-
-    const wodMap = {};
-    filtered.forEach(w => {
-      const d = parseInt(w.date.split('-')[2]);
-      if (!wodMap[d]) wodMap[d] = [];
-      wodMap[d].push(w);
-    });
-
-    // Build weeks
-    const weeks = [];
-    let week = new Array(startDow).fill(null);
-    for (let d = 1; d <= daysInMonth; d++) {
-      week.push(d);
-      if (week.length === 7) { weeks.push(week); week = []; }
-    }
-    if (week.length > 0) { while(week.length < 7) week.push(null); weeks.push(week); }
-
-    let html = '';
-    if (filtered.length === 0 && currentFilter !== 'all') {
-      html = `<div class="empty-month">No hay entrenamientos de ${currentFilter} este mes</div>`;
+function render() {
+  const dim = new Date(Y, M+1, 0).getDate();
+  const cur = filter === 'all' ? wods : wods.filter(w => w.sport === filter);
+  const wm = {};
+  cur.forEach(w => { const d = parseInt(w.date.split('-')[2]); if(!wm[d]) wm[d]=[]; wm[d].push(w); });
+  updateDots(wm, dim);
+  const isCur = Y===today.getFullYear() && M===today.getMonth();
+  let html = '';
+  for (let d = 1; d <= dim; d++) {
+    const isTod = isCur && d===today.getDate();
+    const dt = new Date(Y, M, d);
+    const dw = dt.getDay();
+    const lbl = `${DF[dw]}, ${d} ${MN[M]}${isTod ? ' · Hoy' : ''}`;
+    const id = isTod ? 'id="td-sec"' : '';
+    html += `<div class="day-lbl" ${id}>${lbl}</div>`;
+    const ws = wm[d] || [];
+    if (!ws.length) {
+      html += `<div class="rest-card"><div class="rest-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="#ccc" stroke-width="1.5" fill="none"/><path d="M9 5v4l2.5 2.5" stroke="#ccc" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="rest-t">Descanso</div><div class="rest-s">Recuperación activa</div></div></div>`;
     } else {
-      weeks.forEach((wk, wi) => {
-        const startD = wk.find(x => x !== null);
-        const endD   = [...wk].reverse().find(x => x !== null);
-        html += `<div class="week-label">Semana ${wi+1} · ${startD ? startD : ''}${endD && endD !== startD ? ' — ' + endD : ''} ${MONTH_NAMES[currentMonth].slice(0,3)}</div>`;
-        html += `<div class="days-row">`;
-        wk.forEach(day => {
-          if (day === null) {
-            html += `<div class="day-card empty-day"><div class="day-header"><span class="day-name">—</span><span class="day-num">·</span></div><div class="day-body"></div></div>`;
-          } else {
-            const isToday = day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
-            const dow = DAY_NAMES[new Date(currentYear, currentMonth, day).getDay() === 0 ? 6 : new Date(currentYear, currentMonth, day).getDay() - 1];
-            const wods = wodMap[day] || [];
-            const hasWod = wods.length > 0;
-
-            if (!hasWod) {
-              html += `<div class="day-card rest${isToday?' today':''}">
-                <div class="day-header"><span class="day-name">${dow}</span><span class="day-num">${day}</span></div>
-                <div class="day-body"><span class="tag tag-rest">💤 Descanso</span></div>
-              </div>`;
-            } else {
-              const w = wods[0];
-              const sportColors = { running:'green', hyrox:'blue', deka:'orange', crossfit:'red' };
-              const sportLabels = { running:'🏃 Running', hyrox:'⚡ Hyrox', deka:'🔥 Deka', crossfit:'🏋 CrossFit' };
-              const diffClass = { baja:'diff-easy', media:'diff-medium', alta:'diff-hard', maxima:'diff-hard' }[w.intensity] || 'diff-medium';
-              const diffLabel = { baja:'🟢 Suave', media:'🟡 Moderado', alta:'🔴 Exigente', maxima:'🔴 Máxima' }[w.intensity] || '🟡 Moderado';
-              html += `<div class="day-card${isToday?' today':''}" onclick='openWodModal(${JSON.stringify(w)})'>
-                <div class="day-header"><span class="day-name">${dow}</span><span class="day-num">${day}</span></div>
-                <div class="day-body">
-                  <span class="tag tag-${w.sport}">${sportLabels[w.sport] || w.sport}</span>
-                  <div class="day-desc">${w.title || ''}</div>
-                  <div class="difficulty ${diffClass}">${diffLabel}</div>
-                </div>
-              </div>`;
-            }
-          }
-        });
-        html += `</div>`;
+      ws.forEach(w => {
+        const sc = spc(w.sport), il = il2(w.intensity);
+        const prev = (w.main||'').split('\n').filter(l=>l.trim()).slice(0,3);
+        html += `<div class="wod-card" onclick='openDet(${JSON.stringify(w)})'>
+          <div class="wc-bar ${sc}"></div>
+          <div class="wc-in">
+            <div class="wc-top">
+              <div class="wc-sp"><div class="wc-sd ${sc}"></div><span class="wc-sn ${sc}">${spl(w.sport)}</span></div>
+              <span class="wc-int i-${w.intensity||'media'}">${il}</span>
+            </div>
+            <div class="wc-title">${w.title||'Entrenamiento'}</div>
+            <div class="wc-chips">
+              ${w.duration?`<div class="chip">${w.duration}</div>`:''}
+              ${w.volume?`<div class="chip">${w.volume}</div>`:''}
+              ${w.type?`<div class="chip">${w.type}</div>`:''}
+            </div>
+            ${prev.length?`<div class="wc-div"></div><div class="wc-prev">${prev.map(l=>`<div class="wcp"><div class="wcp-dot"></div>${l.trim()}</div>`).join('')}</div>`:''}
+            <button class="wc-btn">Ver entrenamiento completo</button>
+          </div>
+        </div>`;
       });
     }
-    container.innerHTML = html;
   }
+  document.getElementById('mainScroll').innerHTML = `<div class="cards-area">${html}</div>`;
+  if (isCur) setTimeout(scrollToToday, 80);
+}
 
-  window.openWodModal = function(w) {
-    const MONTH_NAMES_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-    const parts = w.date.split('-');
-    const d = parseInt(parts[2]);
-    const m = parseInt(parts[1]) - 1;
-    const dateObj = new Date(parseInt(parts[0]), m, d);
-    const dowFull = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'][dateObj.getDay()];
-
-    document.getElementById('modalDate').textContent = `${d} ${MONTH_NAMES_SHORT[m]}`;
-    document.getElementById('modalDay').textContent = `${dowFull}`;
-
-    const sportLabels = { running:'Running', hyrox:'Hyrox', deka:'Deka', crossfit:'CrossFit' };
-    const diffLabel = { baja:'🟢 Suave', media:'🟡 Moderado', alta:'🔴 Exigente', maxima:'🔴 Máxima' }[w.intensity] || '🟡 Moderado';
-    const diffClass = { baja:'diff-easy', media:'diff-medium', alta:'diff-hard', maxima:'diff-hard' }[w.intensity] || 'diff-medium';
-
-    let html = `<span class="modal-sport-tag modal-sport-${w.sport}">${sportLabels[w.sport] || w.sport}</span>`;
-    html += `<div style="font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1.1;margin-bottom:6px;">${w.title || 'Entrenamiento'}</div>`;
-    html += `<div class="modal-diff-row"><span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">Intensidad:</span><span class="difficulty ${diffClass}">${diffLabel}</span></div>`;
-
-    if (w.duration || w.volume || w.type) {
-      html += `<div class="stats-grid">`;
-      if (w.duration) html += `<div class="stat-box"><div class="stat-label">Duración</div><div class="stat-val">${w.duration}</div></div>`;
-      if (w.volume)   html += `<div class="stat-box"><div class="stat-label">Volumen</div><div class="stat-val">${w.volume}</div></div>`;
-      if (w.type)     html += `<div class="stat-box"><div class="stat-label">Tipo</div><div class="stat-val" style="font-size:15px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">${w.type}</div></div>`;
-      html += `</div>`;
-    }
-
-    if (w.notes) {
-      html += `<div class="tip-box"><strong>💡 Nota del entrenador</strong>${w.notes}</div>`;
-    }
-
-    const sections = [
-      { key:'warmup', label:'Calentamiento' },
-      { key:'main',   label:'Parte Principal' },
-      { key:'metcon', label:'MetCon / Finisher' },
-      { key:'cooldown', label:'Vuelta a la Calma' },
-    ];
-
-    sections.forEach(s => {
-      if (w[s.key]) {
-        html += `<div class="workout-block"><div class="workout-title">${s.label}</div>`;
-        const lines = w[s.key].split('\n').filter(l => l.trim());
-        lines.forEach(line => {
-          html += `<div class="workout-item"><div class="workout-bullet"></div><div>${line.trim()}</div></div>`;
-        });
-        html += `</div>`;
-      }
-    });
-
-    document.getElementById('modalBody').innerHTML = html;
-    document.getElementById('modalOverlay').classList.add('open');
-  };
-
-  window.closeModal = function() { document.getElementById('modalOverlay').classList.remove('open'); };
-  window.closeOnOverlay = function(e) { if(e.target===document.getElementById('modalOverlay')) closeModal(); };
-  document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
-
-  // Si ya autenticado, carga directamente
-  if (localStorage.getItem('train_auth') === '1') {
-    loadCalendar();
+function buildStrip() {
+  const dim = new Date(Y, M+1, 0).getDate();
+  const isCur = Y===today.getFullYear() && M===today.getMonth();
+  let html = '';
+  for (let d = 1; d <= dim; d++) {
+    const dow = new Date(Y, M, d).getDay();
+    const dn = DS[dow===0?6:dow-1];
+    const isTod = isCur && d===today.getDate();
+    html += `<div class="wd${isTod?' tod':''}" id="wd-${d}" onclick="jd(${d})"><span class="wd-n">${dn}</span><span class="wd-d">${d}</span><div class="wd-dot" id="wdd-${d}"></div></div>`;
   }
+  document.getElementById('weekStrip').innerHTML = html;
+}
 
-  // DEMO DATA (mientras configuras Firebase)
-  function getDemoData() {
-    const m = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}`;
-    return [
-      { id:'1', date:`${m}-04`, sport:'running', title:'Rodaje Z2 — 45 min', intensity:'baja', duration:'45\'', volume:'Bajo', type:'Aeróbico', notes:'Mantén la frecuencia cardíaca en zona 2. Puedes hablar durante toda la carrera.', warmup:'10 min marcha + movilidad tobillos', main:'35 min @ FC zona 2 (65-70%)\nRitmo conversacional', cooldown:'5 min marcha + estiramientos' },
-      { id:'2', date:`${m}-06`, sport:'hyrox', title:'Simulacro parcial Hyrox', intensity:'alta', duration:'70\'', volume:'Alto', type:'Específico', notes:'Este entreno simula el formato real de Hyrox. Controla el ritmo en las estaciones.', warmup:'15 min activación + movilidad caderas y hombros', main:'4 rondas:\n1km ski erg\n50m sled push\n50m sled pull\n200m farmer carry', metcon:'100 wall balls @ ritmo competición' },
-      { id:'3', date:`${m}-10`, sport:'running', title:'Series 1000m', intensity:'alta', duration:'55\'', volume:'Medio', type:'Velocidad', warmup:'15 min carrera suave + técnica', main:'6 × 1000m @ ritmo 10K\nDescanso: 2 min entre series', cooldown:'10 min suave + estiramientos' },
-      { id:'4', date:`${m}-13`, sport:'deka', title:'Deka Fit — Circuito completo', intensity:'maxima', duration:'75\'', volume:'Alto', type:'Funcional', notes:'Simula el formato real de Deka. 10 estaciones, 2 pasadas con 3 min de descanso.', warmup:'10 min bici suave + movilidad general', main:'Circuito 10 estaciones:\nRemo 500m\nBurpees 20 rep\nKB Swing 30 rep\nBox step 40 rep\nSkiErg 500m\nSlamball 20 rep\nAir Bike cals\nPush-ups 30 rep\nFarmer carry 50m\nSandbag squat 20 rep', cooldown:'Recuperación activa 10 min' },
-      { id:'5', date:`${m}-17`, sport:'hyrox', title:'Running economy + Sled', intensity:'alta', duration:'60\'', volume:'Medio', type:'Específico', warmup:'Drills Hyrox + activación glúteos', main:'3 bloques:\n1km @ ritmo carrera Hyrox\n50m Sled push pesado\n50m Sled pull\nDescanso 3 min — repetir x3', metcon:'Core: 3×15 GHD sit-ups' },
-      { id:'6', date:`${m}-20`, sport:'running', title:'Tirada larga', intensity:'baja', duration:'90\'', volume:'Muy alto', type:'Fondo', warmup:'5 min marcha + movilidad', main:'80 min @ Z2-Z3\nKm 60-75 @ ritmo maratón objetivo', cooldown:'Vuelta calma + cadencia' },
-    ];
+function updateDots(wm, dim) {
+  for (let d = 1; d <= dim; d++) {
+    const dot = document.getElementById('wdd-'+d);
+    if (!dot) continue;
+    dot.className = 'wd-dot';
+    if (wm[d]?.length) dot.classList.add(spc(wm[d][0].sport));
   }
+}
 
+window.jd = function(d) {
+  document.querySelectorAll('.wd').forEach(e => e.classList.remove('sel'));
+  const wd = document.getElementById('wd-'+d);
+  if (wd) { wd.classList.add('sel'); wd.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'}); }
+  const secs = document.querySelectorAll('.day-lbl');
+  for (const s of secs) { if (s.textContent.includes(`, ${d} `)) { s.scrollIntoView({behavior:'smooth',block:'start'}); break; } }
+};
+
+window.scrollToToday = function() {
+  const el = document.getElementById('td-sec');
+  if (el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  const tw = document.querySelector('.wd.tod');
+  if (tw) tw.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+};
+
+window.setFilter = function(s, btn) {
+  filter = s;
+  document.querySelectorAll('.fp').forEach(p => p.classList.remove('on'));
+  btn.classList.add('on');
+  render();
+};
+
+function buildMM() {
+  document.getElementById('mmYr').textContent = Y;
+  document.getElementById('mmGrid').innerHTML = MS.map((m,i) =>
+    `<div class="mm-m${i===M?' on':''}" onclick="selM(${i})">${m}</div>`).join('');
+}
+
+window.openMM = function() { document.getElementById('mmOverlay').classList.add('open'); };
+window.closeMM = function(e) { if(e.target===document.getElementById('mmOverlay')) document.getElementById('mmOverlay').classList.remove('open'); };
+window.selM = function(m) { M = m; document.getElementById('mmOverlay').classList.remove('open'); buildMM(); loadMonth(); };
+
+window.openDet = function(w) {
+  const pts = w.date.split('-');
+  const d=parseInt(pts[2]), mo=parseInt(pts[1])-1;
+  const dt = new Date(parseInt(pts[0]), mo, d);
+  const sc = spc(w.sport);
+  document.getElementById('dSpPill').textContent = spl(w.sport);
+  document.getElementById('dSpPill').className = `det-sp-pill ${sc}`;
+  document.getElementById('dDate').textContent = `${DF[dt.getDay()]}, ${d} de ${MN[mo]}`;
+  document.getElementById('dTitle').textContent = w.title || 'Entrenamiento';
+  const ic = {baja:'var(--run)',media:'var(--deka)',alta:'var(--accent)',maxima:'var(--accent)'}[w.intensity]||'var(--deka)';
+  const iv = {baja:'Suave',media:'Moderado',alta:'Alta',maxima:'Máxima'}[w.intensity]||'Moderado';
+  document.getElementById('dStats').innerHTML = `
+    <div class="dstat"><div class="dstat-l">Duración</div><div class="dstat-v">${w.duration||'—'}</div></div>
+    <div class="dstat"><div class="dstat-l">Volumen</div><div class="dstat-v" style="font-size:14px">${w.volume||'—'}</div></div>
+    <div class="dstat"><div class="dstat-l">Nivel</div><div class="dstat-v" style="font-size:14px;color:${ic}">${iv}</div></div>`;
+  let body = '';
+  if (w.notes) body += `<div class="note-box"><div class="note-lbl">Nota del entrenador</div><div class="note-txt">${w.notes}</div></div>`;
+  [['warmup','Calentamiento'],['main','Parte principal'],['metcon','MetCon / Finisher'],['cooldown','Vuelta a la calma']].forEach(([k,lb]) => {
+    if (!w[k]) return;
+    const ls = w[k].split('\n').filter(l=>l.trim());
+    body += `<div class="wod-blk"><div class="blk-lbl">${lb}</div>${ls.map((l,i)=>`<div class="blk-item"><div class="blk-n">${i+1}</div>${l.trim()}</div>`).join('')}</div>`;
+  });
+  document.getElementById('dBody').innerHTML = body;
+  document.getElementById('detPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeDetail = function() { document.getElementById('detPanel').classList.remove('open'); document.body.style.overflow=''; };
+
+function spc(s) { return {running:'run',hyrox:'hyrox',deka:'deka',crossfit:'crossfit'}[s]||'run'; }
+function spl(s) { return {running:'Running',hyrox:'Hyrox',deka:'Deka',crossfit:'CrossFit'}[s]||s; }
+function il2(i) { return {baja:'Suave',media:'Moderado',alta:'Alta intensidad',maxima:'Máxima'}[i]||'Moderado'; }
+
+function demo() {
+  const mp = `${Y}-${String(M+1).padStart(2,'0')}`;
+  return [
+    {id:'1',date:`${mp}-03`,sport:'running',title:'Rodaje Z2 — 45 min',intensity:'baja',duration:"45'",volume:'Bajo',type:'Aeróbico',notes:'Mantén la FC en zona 2. Debes poder hablar cómodamente durante toda la carrera.',warmup:'10 min marcha tranquila\nMovilidad tobillos y caderas',main:'35 min @ FC zona 2 (65-70%)\nRitmo completamente conversacional',cooldown:'5 min marcha + estiramientos'},
+    {id:'2',date:`${mp}-06`,sport:'hyrox',title:'Simulacro Hyrox — 4 rondas',intensity:'alta',duration:"70'",volume:'Alto',type:'Específico',notes:'No vacíes en la primera ronda. Mantén un ritmo constante en las 4.',warmup:'15 min activación\nMovilidad caderas y hombros\nSkipping + progresivos',main:'4 rondas:\n1km Ski Erg\n50m Sled Push\n50m Sled Pull\n200m Farmer Carry',metcon:'100 Wall Balls @ ritmo competición',cooldown:'Recuperación activa 10 min'},
+    {id:'3',date:`${mp}-10`,sport:'running',title:'Series 1000m',intensity:'alta',duration:"55'",volume:'Medio',type:'Velocidad',notes:'Ritmo objetivo: 10-15 seg más rápido que tu 10K.',warmup:'15 min carrera suave\nTécnica: skipping, talones, zancada',main:'6 × 1000m @ ritmo 10K\nDescanso: 2 min andando entre series',cooldown:'10 min trote suave + estiramientos'},
+    {id:'4',date:`${mp}-13`,sport:'deka',title:'Deka Fit — Circuito completo',intensity:'maxima',duration:"75'",volume:'Muy alto',type:'Funcional',notes:'Simula el formato real de Deka. 10 estaciones, 2 pasadas.',warmup:'10 min bici suave\nMovilidad general',main:'Circuito 10 estaciones:\nRemo 500m\nBurpees 20 rep\nKB Swing 30 rep\nBox step 40 rep\nSkiErg 500m\nSlamball 20 rep\nAir Bike cals\nPush-ups 30 rep\nFarmer carry 50m\nSandbag squat 20 rep',cooldown:'10 min recuperación activa'},
+    {id:'5',date:`${mp}-17`,sport:'hyrox',title:'Running economy + Sled',intensity:'alta',duration:"60'",volume:'Medio',type:'Específico',warmup:'Drills Hyrox + activación glúteos',main:'3 bloques:\n1km @ ritmo Hyrox\n50m Sled push pesado\n50m Sled pull\nDescanso 3 min — ×3',metcon:'Core: 3×15 GHD sit-ups'},
+    {id:'6',date:`${mp}-20`,sport:'running',title:'Tirada larga — fondo',intensity:'baja',duration:"90'",volume:'Muy alto',type:'Fondo',notes:'La tirada más importante del mes. Ve muy tranquilo.',warmup:'5 min marcha',main:'80 min @ Z2-Z3\nKm 60-75 @ ritmo maratón',cooldown:'Vuelta calma + cadencia'},
+    {id:'7',date:`${mp}-24`,sport:'deka',title:'Deka Strength — Upper',intensity:'media',duration:"50'",volume:'Medio',type:'Fuerza',warmup:'10 min movilidad hombros',main:'5×5 Press banca @ 75%\n4×8 Remo barra\n3×10 Arnold press\n3×12 Face pulls',cooldown:'Estiramientos pecho y espalda'},
+    {id:'8',date:`${mp}-27`,sport:'hyrox',title:'Hyrox Doubles simulation',intensity:'maxima',duration:"80'",volume:'Alto',type:'Competición',notes:'Simulacro al 90%. Mejora los tiempos del último.',warmup:'20 min activación específica',main:'8 estaciones dobles:\n2×1km Ski Erg\n2×50m Sled Push\n2×50m Sled Pull\n2×200m Farmer Carry',metcon:'200 Wall Balls en el menor tiempo posible'},
+  ];
+}
 </script>
 </body>
 </html>
