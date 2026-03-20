@@ -3,571 +3,721 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TRAIN · Admin Panel</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#0d1117">
+<title>IronHawk Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #0a0a0a;
-    --dark: #111318;
-    --card: #181c24;
-    --border: #252a35;
-    --red: #e8212e;
-    --red-dim: #7a1118;
-    --orange: #ff6b00;
-    --gold: #f5c842;
-    --white: #f0eeea;
-    --muted: #8a8f9e;
-    --green: #2ecc71;
-    --blue: #4fa3e0;
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--black); color:var(--white); font-family:'Barlow',sans-serif; min-height:100vh; }
+:root{
+  --bg:#0d1117;--sf:#161b22;--sf2:#21262d;--bd:#30363d;--bd2:#444c56;
+  --t:#e6edf3;--t2:#8b949e;--t3:#484f58;
+  --bl:#58a6ff;--gr:#3fb950;--or:#d29922;--rd:#f85149;--pu:#bc8cff;
+  --r:10px;--rs:6px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:"DM Sans",-apple-system,sans-serif;background:var(--bg);color:var(--t);min-height:100vh;font-size:14px}
 
-  /* LOGIN */
-  .login-screen { position:fixed; inset:0; background:var(--black); z-index:200; display:flex; align-items:center; justify-content:center; }
-  .login-screen.hidden { display:none; }
-  .login-box { background:var(--dark); border:1px solid var(--border); border-top:3px solid var(--red); padding:40px 48px; width:100%; max-width:400px; }
-  .login-logo { font-family:'Bebas Neue',sans-serif; font-size:44px; line-height:1; margin-bottom:4px; }
-  .login-logo span { color:var(--red); }
-  .login-sub { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--muted); margin-bottom:32px; }
-  .login-input { width:100%; background:rgba(255,255,255,0.04); border:1px solid var(--border); padding:12px 16px; color:var(--white); font-family:'Barlow',sans-serif; font-size:15px; outline:none; margin-bottom:20px; transition:border-color .2s; }
-  .login-input:focus { border-color:var(--red-dim); }
-  .login-btn { width:100%; background:var(--red); border:none; color:var(--white); font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px; padding:12px; cursor:pointer; }
-  .login-btn:hover { background:#c5131f; }
-  .login-error { font-size:12px; color:var(--red); font-family:'Barlow Condensed',sans-serif; margin-top:10px; display:none; }
-  .login-error.show { display:block; }
+/* LOGIN */
+#ls{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;padding:24px}
+#ls.h{display:none}
+.li{width:100%;max-width:380px;background:var(--sf);border:1px solid var(--bd);border-radius:16px;padding:32px}
+.li-logo{display:flex;align-items:center;gap:10px;margin-bottom:24px}
+.li-ic{width:36px;height:36px;background:var(--bl);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.li-brand{font-size:15px;font-weight:700;color:var(--t)}
+.li-sub2{font-size:12px;color:var(--t2)}
+.li-title{font-size:22px;font-weight:700;color:var(--t);letter-spacing:-.5px;margin-bottom:4px}
+.li-desc{font-size:13px;color:var(--t2);margin-bottom:28px}
+.fi{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 12px;font-family:"DM Sans",sans-serif;font-size:14px;color:var(--t);outline:none;margin-bottom:12px;transition:border-color .15s}
+.fi:focus{border-color:var(--bl)}
+.btn-primary{width:100%;background:var(--bl);border:none;color:#0d1117;border-radius:var(--rs);padding:11px;font-family:"DM Sans",sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.btn-primary:hover{opacity:.9}
+.btn-primary:active{opacity:.75}
+.li-err{font-size:12px;color:var(--rd);margin-top:10px;display:none}
+.li-err.show{display:block}
 
-  /* ADMIN LAYOUT */
-  .admin { display:none; }
-  .admin.visible { display:block; }
-  .admin-header { background:var(--dark); border-bottom:1px solid var(--border); padding:20px 32px; display:flex; align-items:center; justify-content:space-between; }
-  .admin-logo { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:2px; }
-  .admin-logo span { color:var(--red); }
-  .admin-sub { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
-  .logout-btn { background:none; border:1px solid var(--border); color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; padding:6px 14px; cursor:pointer; transition:all .15s; }
-  .logout-btn:hover { border-color:var(--red); color:var(--red); }
+/* SHELL */
+#app{display:none}
+#app.on{display:flex;min-height:100vh;flex-direction:column}
 
-  .admin-body { padding:32px; max-width:900px; margin:0 auto; }
+/* TOP BAR */
+.topbar{background:var(--sf);border-bottom:1px solid var(--bd);padding:0 24px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.tb-left{display:flex;align-items:center;gap:10px}
+.tb-ic{width:28px;height:28px;background:var(--bl);border-radius:6px;display:flex;align-items:center;justify-content:center}
+.tb-name{font-size:14px;font-weight:700;color:var(--t)}
+.tb-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(88,166,255,.15);color:var(--bl);letter-spacing:.5px;text-transform:uppercase}
+.tb-logout{font-size:12px;color:var(--t2);cursor:pointer;padding:6px 10px;border-radius:var(--rs);border:1px solid var(--bd);transition:all .15s}
+.tb-logout:hover{border-color:var(--bd2);color:var(--t)}
 
-  /* TABS */
-  .tabs { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:28px; }
-  .tab-btn { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:3px; text-transform:uppercase; padding:10px 20px; background:none; border:none; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; transition:all .15s; }
-  .tab-btn.active { color:var(--white); border-bottom-color:var(--red); }
-  .tab-panel { display:none; }
-  .tab-panel.active { display:block; }
+/* TABS */
+.tabs{background:var(--sf);border-bottom:1px solid var(--bd);display:flex;padding:0 24px;gap:0;overflow-x:auto}
+.tab{padding:12px 16px;font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.tab.on{color:var(--bl);border-bottom-color:var(--bl)}
+.tab:hover:not(.on){color:var(--t)}
 
-  /* FORM */
-  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  .form-full { grid-column:1/-1; }
-  .form-group { margin-bottom:0; }
-  label { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:6px; }
-  input, select, textarea {
-    width:100%; background:rgba(255,255,255,0.04); border:1px solid var(--border);
-    padding:10px 14px; color:var(--white); font-family:'Barlow',sans-serif; font-size:14px; outline:none; transition:border-color .2s;
-    border-radius:2px;
-  }
-  input:focus, select:focus, textarea:focus { border-color:var(--red-dim); }
-  select option { background:var(--dark); }
-  textarea { resize:vertical; line-height:1.6; min-height:80px; }
-  .form-hint { font-size:11px; color:var(--muted); margin-top:4px; font-family:'Barlow Condensed',sans-serif; letter-spacing:.5px; }
+/* MAIN */
+.main{flex:1;padding:24px;max-width:900px;margin:0 auto;width:100%}
+.section{display:none}
+.section.on{display:block}
 
-  .section-title { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--red); font-weight:600; margin:24px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+.fg-full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:6px}
+.lbl{font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
+.lbl span{color:var(--rd)}
+.fi2{background:var(--bg);border:1px solid var(--bd);border-radius:var(--rs);padding:10px 12px;font-family:"DM Sans",sans-serif;font-size:14px;color:var(--t);outline:none;width:100%;transition:border-color .15s}
+.fi2:focus{border-color:var(--bl)}
+.fi2.ta{min-height:80px;resize:vertical;line-height:1.55}
+select.fi2{cursor:pointer}
+.fi2 option{background:var(--sf)}
+.hint{font-size:11px;color:var(--t3)}
 
-  .submit-btn {
-    background:var(--red); border:none; color:var(--white);
-    font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px;
-    padding:13px 40px; cursor:pointer; transition:background .15s; margin-top:8px;
-  }
-  .submit-btn:hover { background:#c5131f; }
-  .submit-btn:disabled { background:var(--muted); cursor:not-allowed; }
+/* SPORT SELECTOR */
+.sport-sel{display:flex;gap:8px;flex-wrap:wrap}
+.sport-opt{padding:8px 16px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid var(--bd);color:var(--t2);transition:all .15s;background:transparent}
+.sport-opt:hover{border-color:var(--bd2)}
+.sport-opt.on[data-sp=running]{background:rgba(63,185,80,.15);color:var(--gr);border-color:var(--gr)}
+.sport-opt.on[data-sp=crossfit]{background:rgba(248,81,73,.15);color:var(--rd);border-color:var(--rd)}
+.sport-opt.on[data-sp=hyrox]{background:rgba(188,140,255,.15);color:var(--pu);border-color:var(--pu)}
+.sport-opt.on[data-sp=deka]{background:rgba(210,153,34,.15);color:var(--or);border-color:var(--or)}
 
-  /* ALERTS */
-  .alert { padding:12px 16px; border-radius:2px; font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:1px; margin-bottom:20px; display:none; }
-  .alert.show { display:block; }
-  .alert-success { background:rgba(46,204,113,0.1); border:1px solid rgba(46,204,113,0.3); color:var(--green); }
-  .alert-error   { background:rgba(232,33,46,0.1); border:1px solid rgba(232,33,46,0.3); color:var(--red); }
+/* CARD */
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:20px}
+.card-title{font-size:15px;font-weight:700;color:var(--t);letter-spacing:-.3px;margin-bottom:4px}
+.card-sub{font-size:12px;color:var(--t2);margin-bottom:18px}
+.divider{height:1px;background:var(--bd);margin:18px 0}
 
-  /* WOD LIST */
-  .wod-list { display:flex; flex-direction:column; gap:10px; }
-  .wod-item { background:var(--card); border:1px solid var(--border); padding:14px 18px; display:flex; align-items:center; gap:14px; }
-  .wod-item-date { font-family:'Bebas Neue',sans-serif; font-size:26px; line-height:1; color:var(--muted); min-width:52px; }
-  .wod-item-sport { font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; font-weight:700; padding:2px 8px; border:1px solid; }
-  .sport-running { border-color:var(--green); color:var(--green); }
-  .sport-hyrox   { border-color:var(--blue); color:var(--blue); }
-  .sport-deka    { border-color:var(--orange); color:var(--orange); }
-  .sport-crossfit{ border-color:var(--red); color:var(--red); }
-  .wod-item-title { flex:1; font-size:14px; color:var(--white); }
-  .wod-item-actions { display:flex; gap:8px; }
-  .btn-delete { background:none; border:1px solid var(--border); color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:2px; padding:5px 10px; cursor:pointer; transition:all .15s; }
-  .btn-delete:hover { border-color:var(--red); color:var(--red); }
+/* BUTTONS */
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.btn{padding:9px 16px;border-radius:var(--rs);font-family:"DM Sans",sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px}
+.btn-g{background:var(--gr);color:#0d1117;border-color:var(--gr)}
+.btn-g:hover{opacity:.85}
+.btn-b{background:transparent;color:var(--bl);border-color:var(--bl)}
+.btn-b:hover{background:rgba(88,166,255,.1)}
+.btn-r{background:transparent;color:var(--rd);border-color:var(--rd)}
+.btn-r:hover{background:rgba(248,81,73,.1)}
+.btn:active{opacity:.7}
+.btn:disabled{opacity:.4;cursor:not-allowed}
 
-  /* MONTH SELECTOR FOR LIST */
-  .list-controls { display:flex; gap:12px; align-items:center; margin-bottom:20px; flex-wrap:wrap; }
-  .list-controls input, .list-controls select { width:auto; }
+/* STATUS */
+.status{padding:10px 14px;border-radius:var(--rs);font-size:13px;font-weight:500;display:none;margin-top:14px;border:1px solid}
+.status.show{display:flex;align-items:center;gap:8px}
+.status.ok{background:rgba(63,185,80,.08);color:var(--gr);border-color:rgba(63,185,80,.3)}
+.status.err{background:rgba(248,81,73,.08);color:var(--rd);border-color:rgba(248,81,73,.3)}
+.status.loading{background:rgba(88,166,255,.08);color:var(--bl);border-color:rgba(88,166,255,.3)}
 
-  .no-wods { text-align:center; padding:40px; color:var(--muted); font-family:'Barlow Condensed',sans-serif; letter-spacing:2px; font-size:12px; text-transform:uppercase; border:1px dashed var(--border); }
+/* DROPZONE */
+.dropzone{border:2px dashed var(--bd);border-radius:var(--r);padding:40px 24px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.dropzone:hover,.dropzone.over{border-color:var(--bl);background:rgba(88,166,255,.05)}
+.dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.dz-ic{font-size:32px;margin-bottom:10px}
+.dz-title{font-size:15px;font-weight:600;color:var(--t);margin-bottom:4px}
+.dz-sub{font-size:13px;color:var(--t2)}
+
+/* TABLE */
+.prev-wrap{overflow-x:auto;margin-top:16px;border:1px solid var(--bd);border-radius:var(--rs)}
+table.prev{width:100%;border-collapse:collapse;font-size:12px}
+table.prev th{background:var(--sf2);padding:8px 10px;text-align:left;font-weight:600;color:var(--t2);text-transform:uppercase;font-size:10px;letter-spacing:.5px;border-bottom:1px solid var(--bd);white-space:nowrap}
+table.prev td{padding:8px 10px;border-bottom:1px solid var(--bd);color:var(--t);vertical-align:top;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+table.prev tr:last-child td{border-bottom:none}
+table.prev tr:hover td{background:var(--sf2)}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:11px;font-weight:600}
+.badge-or{background:rgba(210,153,34,.15);color:var(--or)}
+.badge-gr{background:rgba(63,185,80,.15);color:var(--gr)}
+.badge-bl{background:rgba(88,166,255,.15);color:var(--bl)}
+.badge-rd{background:rgba(248,81,73,.15);color:var(--rd)}
+.badge-pu{background:rgba(188,140,255,.15);color:var(--pu)}
+
+/* WOD LIST */
+.wod-row{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;transition:border-color .15s}
+.wod-row:hover{border-color:var(--bd2)}
+.wr-date{font-size:12px;font-weight:700;color:var(--t2);min-width:88px;font-variant-numeric:tabular-nums}
+.wr-title{flex:1;font-size:13px;font-weight:500;color:var(--t)}
+.wr-sede{font-size:11px;color:var(--t3)}
+.wr-del{padding:5px 10px;background:transparent;border:1px solid var(--bd);border-radius:var(--rs);font-size:11px;font-weight:600;color:var(--t2);cursor:pointer;transition:all .15s;flex-shrink:0}
+.wr-del:hover{border-color:var(--rd);color:var(--rd);background:rgba(248,81,73,.08)}
+.empty{text-align:center;padding:40px 20px;color:var(--t3);font-size:13px}
+.filter-row2{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.pill{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;background:var(--sf2);border:1px solid var(--bd);color:var(--t2);cursor:pointer;transition:all .15s}
+.pill.on{background:var(--bl);color:#0d1117;border-color:var(--bl)}
+.pill:hover:not(.on){border-color:var(--bd2);color:var(--t)}
+
+/* PROGRESS */
+.prog-wrap{margin-top:14px;display:none}
+.prog-wrap.show{display:block}
+.prog-bar{height:4px;background:var(--bd);border-radius:2px;overflow:hidden;margin-bottom:6px}
+.prog-fill{height:100%;background:var(--bl);transition:width .3s;border-radius:2px}
+.prog-label{font-size:12px;color:var(--t2)}
+
+/* SECTION HEADER */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.sec-hdr-title{font-size:18px;font-weight:700;color:var(--t);letter-spacing:-.4px}
+.sec-hdr-sub{font-size:12px;color:var(--t2);margin-top:2px}
+
+/* MODAL */
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-ov.open{display:flex}
+.modal-box{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;max-width:380px;width:100%;animation:pop .2s ease}
+@keyframes pop{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
+.modal-title{font-size:16px;font-weight:700;color:var(--t);margin-bottom:8px}
+.modal-msg{font-size:13px;color:var(--t2);line-height:1.55;margin-bottom:20px}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end}
+
+/* SPORT DOT */
+.sp-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+.sp-dot.running{background:var(--gr)}.sp-dot.crossfit{background:var(--rd)}.sp-dot.hyrox{background:var(--pu)}.sp-dot.deka{background:var(--or)}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
-<div class="login-screen" id="loginScreen">
-  <div class="login-box">
-    <div class="login-logo">TRAIN<span>.</span> ADMIN</div>
-    <div class="login-sub">Panel de administración — solo entrenador</div>
-    <label>Contraseña admin</label>
-    <input type="password" class="login-input" id="adminPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkAdmin()">
-    <button class="login-btn" onclick="checkAdmin()">ACCEDER</button>
-    <div class="login-error" id="adminError">Contraseña incorrecta.</div>
+<div id="ls">
+  <div class="li">
+    <div class="li-logo">
+      <div class="li-ic"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 7h3V4.5h4V7h3v5h-3v2.5H7V12H4z" stroke="white" stroke-width="1.5" stroke-linejoin="round" fill="none"/><path d="M2 8h2M14 8h2M2 10h2M14 10h2" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div><div class="li-brand">IronHawk Vicalvaro</div><div class="li-sub2">Panel de administracion</div></div>
+    </div>
+    <div class="li-title">Acceso Admin</div>
+    <div class="li-desc">Introduce la contrasena de administrador para continuar.</div>
+    <label style="font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Contrasena</label>
+    <input type="password" class="fi" id="ac" placeholder="Contrasena admin" onkeydown="if(event.key==='Enter')dL()">
+    <button class="btn-primary" onclick="dL()">Entrar al panel</button>
+    <div class="li-err" id="le">Contrasena incorrecta.</div>
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
-<div class="admin" id="adminPanel">
-  <div class="admin-header">
-    <div>
-      <div class="admin-logo">TRAIN<span>.</span> ADMIN</div>
-      <div class="admin-sub">Panel de gestión de entrenamientos</div>
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="tb-left">
+      <div class="tb-ic"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 6h2.5V4h4v2h2.5v4.5h-2.5V11H6V10.5H3.5z" stroke="#0d1117" stroke-width="1.5" stroke-linejoin="round" fill="none"/><path d="M1.5 7h2M12.5 7h2M1.5 9h2M12.5 9h2" stroke="#0d1117" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <span class="tb-name">IronHawk Admin</span>
+      <span class="tb-badge">v2.0</span>
     </div>
-    <button class="logout-btn" onclick="adminLogout()">Cerrar sesión</button>
+    <div class="tb-logout" onclick="logout()">Cerrar sesion</div>
   </div>
 
-  <div class="admin-body">
-    <div class="alert alert-success" id="alertSuccess">✓ WOD guardado correctamente en Firebase</div>
-    <div class="alert alert-error"   id="alertError">✗ Error al guardar. Comprueba la configuración de Firebase.</div>
+  <div class="tabs">
+    <div class="tab on" id="tab-add" onclick="swTab('add')">Subir WOD</div>
+    <div class="tab" id="tab-bulk" onclick="swTab('bulk')">Carga masiva</div>
+    <div class="tab" id="tab-list" onclick="swTab('list')">Ver / Eliminar</div>
+  </div>
 
-    <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('upload',this)">Subir WOD</button>
-      <button class="tab-btn" onclick="switchTab('bulk',this)">Carga Masiva Excel</button>
-      <button class="tab-btn" onclick="switchTab('list',this)">Ver / Eliminar</button>
-    </div>
+  <div class="main">
 
-    <!-- TAB: UPLOAD -->
-    <div class="tab-panel active" id="tab-upload">
-      <form id="wodForm" onsubmit="submitWod(event)">
-        <div class="section-title">Información básica</div>
+    <!-- TAB: SUBIR WOD -->
+    <div class="section on" id="sec-add">
+      <div class="sec-hdr">
+        <div><div class="sec-hdr-title">Subir WOD individual</div><div class="sec-hdr-sub">Rellena los campos y guarda en Firebase</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Deporte</div>
+        <div class="card-sub">Selecciona el tipo de entrenamiento</div>
+        <div class="sport-sel" id="sport-sel">
+          <div class="sport-opt on" data-sp="running" onclick="selSport('running',this)">Running</div>
+          <div class="sport-opt" data-sp="crossfit" onclick="selSport('crossfit',this)">CrossFit</div>
+          <div class="sport-opt" data-sp="hyrox" onclick="selSport('hyrox',this)">Hyrox</div>
+          <div class="sport-opt" data-sp="deka" onclick="selSport('deka',this)">DEKA</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Informacion basica</div>
+        <div class="card-sub">Campos obligatorios para mostrar el WOD en la app</div>
         <div class="form-grid">
-          <div class="form-group">
-            <label>Fecha</label>
-            <input type="date" id="f-date" required>
+          <div class="field">
+            <label class="lbl">Fecha <span>*</span></label>
+            <input type="date" class="fi2" id="f-fecha">
           </div>
-          <div class="form-group">
-            <label>Deporte</label>
-            <select id="f-sport" required>
-              <option value="">— Selecciona —</option>
-              <option value="running">🏃 Running</option>
-              <option value="hyrox">⚡ Hyrox</option>
-              <option value="deka">🔥 Deka</option>
-              <option value="crossfit">🏋 CrossFit</option>
+          <div class="field">
+            <label class="lbl">Sede / Lugar</label>
+            <select class="fi2" id="f-sede">
+              <option value="">Selecciona sede...</option>
+              <option>Retiro (Pta Alcala)</option>
+              <option>Sanchinarro (Valdebebas)</option>
+              <option>Juan Carlos I</option>
+              <option>Parque Juan Carlos I</option>
+              <option>Madrid</option>
+              <option>Box IronHawk</option>
+              <option>Libre</option>
             </select>
           </div>
-          <div class="form-group form-full">
-            <label>Título del entrenamiento</label>
-            <input type="text" id="f-title" placeholder="Ej: Simulacro Hyrox parcial — 4 rondas" required>
+          <div class="field fg-full">
+            <label class="lbl">Titulo del entrenamiento <span>*</span></label>
+            <input type="text" class="fi2" id="f-titulo" placeholder="ej: Strength + BREATH — Lunes Box">
           </div>
-          <div class="form-group">
-            <label>Intensidad</label>
-            <select id="f-intensity">
-              <option value="baja">🟢 Baja — Suave</option>
-              <option value="media" selected>🟡 Media — Moderado</option>
-              <option value="alta">🔴 Alta — Exigente</option>
-              <option value="maxima">⚡ Máxima</option>
+          <div class="field">
+            <label class="lbl">Tipo</label>
+            <select class="fi2" id="f-type">
+              <option value="">Selecciona tipo...</option>
+              <optgroup label="Running">
+                <option>Series</option>
+                <option>Rodaje controlado</option>
+                <option>Rodaje regenerativo</option>
+                <option>Fartlek + Series</option>
+                <option>Competicion</option>
+              </optgroup>
+              <optgroup label="CrossFit">
+                <option>Strength + BREATH</option>
+                <option>BREATH</option>
+                <option>TONE + BREATH</option>
+                <option>OLY + BREATH</option>
+                <option>Active Recovery</option>
+                <option>BREATH Sustain</option>
+              </optgroup>
+              <optgroup label="Hyrox / DEKA">
+                <option>Hyrox Simulation</option>
+                <option>DEKA FIT Prep</option>
+                <option>Hybrid Endurance</option>
+                <option>Functional Running</option>
+              </optgroup>
             </select>
           </div>
-          <div class="form-group">
-            <label>Duración estimada</label>
-            <input type="text" id="f-duration" placeholder="Ej: 60'">
+          <div class="field">
+            <label class="lbl">Intensidad</label>
+            <select class="fi2" id="f-intensity">
+              <option value="media">Moderado</option>
+              <option value="baja">Suave</option>
+              <option value="alta">Exigente</option>
+              <option value="maxima">Maxima</option>
+            </select>
           </div>
-          <div class="form-group">
-            <label>Volumen</label>
-            <input type="text" id="f-volume" placeholder="Ej: Alto, Medio, 12km...">
+          <div class="field">
+            <label class="lbl">Duracion</label>
+            <input type="text" class="fi2" id="f-duration" placeholder="ej: 60'">
           </div>
-          <div class="form-group">
-            <label>Tipo</label>
-            <input type="text" id="f-type" placeholder="Ej: Fuerza, Aeróbico, Específico...">
+          <div class="field">
+            <label class="lbl">Volumen</label>
+            <select class="fi2" id="f-volume">
+              <option value="">—</option>
+              <option>Bajo</option>
+              <option>Medio</option>
+              <option>Alto</option>
+              <option>Muy alto</option>
+            </select>
           </div>
         </div>
+      </div>
 
-        <div class="section-title">Contenido del entrenamiento</div>
+      <div class="card">
+        <div class="card-title">Contenido del entrenamiento</div>
+        <div class="card-sub">Usa una linea por ejercicio / instruccion</div>
         <div class="form-grid">
-          <div class="form-group form-full">
-            <label>Nota del entrenador (opcional)</label>
-            <textarea id="f-notes" placeholder="Explicación general, consejos, qué trabajamos hoy..." rows="3"></textarea>
+          <div class="field fg-full">
+            <label class="lbl">Nota del entrenador</label>
+            <textarea class="fi2 ta" id="f-notes" placeholder="Observaciones, contexto, consejos..."></textarea>
           </div>
-          <div class="form-group form-full">
-            <label>Calentamiento</label>
-            <textarea id="f-warmup" placeholder="Una línea por ejercicio. Ej:&#10;10 min carrera suave&#10;Movilidad de cadera&#10;Activación de hombros" rows="4"></textarea>
-            <div class="form-hint">Cada línea = un ítem en el modal</div>
+          <div class="field">
+            <label class="lbl">Calentamiento / MOVE</label>
+            <textarea class="fi2 ta" id="f-warmup" placeholder="Movilidad, activacion..."></textarea>
           </div>
-          <div class="form-group form-full">
-            <label>Parte Principal</label>
-            <textarea id="f-main" placeholder="Una línea por ejercicio o bloque. Ej:&#10;4 rondas:&#10;1km Ski Erg&#10;50m Sled push&#10;50m Sled pull" rows="6"></textarea>
+          <div class="field">
+            <label class="lbl">Parte principal <span>*</span></label>
+            <textarea class="fi2 ta" id="f-main" placeholder="Strength, BREATH, WOD..."></textarea>
           </div>
-          <div class="form-group form-full">
-            <label>MetCon / Finisher (opcional)</label>
-            <textarea id="f-metcon" placeholder="Bloque final de acondicionamiento si lo hay..." rows="4"></textarea>
+          <div class="field">
+            <label class="lbl">MetCon / Finisher</label>
+            <textarea class="fi2 ta" id="f-metcon" placeholder="Opcional..."></textarea>
           </div>
-          <div class="form-group form-full">
-            <label>Vuelta a la calma (opcional)</label>
-            <textarea id="f-cooldown" placeholder="Estiramientos, recuperación activa..." rows="3"></textarea>
+          <div class="field">
+            <label class="lbl">Vuelta a la calma</label>
+            <textarea class="fi2 ta" id="f-cooldown" placeholder="Estiramientos, foam roller..."></textarea>
           </div>
         </div>
-
-        <div style="margin-top:20px;">
-          <button type="submit" class="submit-btn" id="submitBtn">GUARDAR EN FIREBASE</button>
+        <div class="btn-row">
+          <button class="btn btn-g" onclick="saveWod()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Guardar en Firebase
+          </button>
+          <button class="btn btn-b" onclick="clearForm()">Limpiar</button>
         </div>
-      </form>
+        <div class="status" id="st-add"></div>
+      </div>
     </div>
 
-    <!-- TAB: LIST -->
-    <div class="tab-panel" id="tab-list">
-      <div class="list-controls">
-        <div>
-          <label style="display:inline;margin-right:8px;">Mes:</label>
-          <input type="month" id="listMonth" onchange="loadWodList()">
+    <!-- TAB: CARGA MASIVA -->
+    <div class="section" id="sec-bulk">
+      <div class="sec-hdr">
+        <div><div class="sec-hdr-title">Carga masiva desde Excel / CSV</div><div class="sec-hdr-sub">Sube el fichero .xlsx con columna <code>sport</code></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">1. Selecciona el archivo</div>
+        <div class="card-sub">Columnas: fecha, month, <strong>sport</strong>, sede, titulo, intensity, duration, volume, type, notes, warmup, main, metcon, cooldown</div>
+        <div class="dropzone" id="dz" ondragover="dzOver(event)" ondragleave="dzLeave()" ondrop="dzDrop(event)">
+          <input type="file" accept=".xlsx,.xls,.csv" onchange="dzFile(this)">
+          <div class="dz-ic">📊</div>
+          <div class="dz-title">Arrastra el Excel aqui</div>
+          <div class="dz-sub">o haz clic para seleccionar · .xlsx / .csv</div>
         </div>
-        <div>
-          <label style="display:inline;margin-right:8px;">Deporte:</label>
-          <select id="listSport" onchange="loadWodList()">
-            <option value="">Todos</option>
-            <option value="running">Running</option>
-            <option value="hyrox">Hyrox</option>
-            <option value="deka">Deka</option>
-            <option value="crossfit">CrossFit</option>
-          </select>
+        <div class="status" id="st-parse"></div>
+      </div>
+
+      <div id="preview-section" style="display:none">
+        <div class="card">
+          <div class="card-title">2. Vista previa</div>
+          <div class="card-sub" id="prev-count">0 WODs encontrados</div>
+          <div class="prev-wrap"><table class="prev" id="prev-table"><thead></thead><tbody></tbody></table></div>
+        </div>
+        <div class="card">
+          <div class="card-title">3. Subir a Firebase</div>
+          <div class="card-sub">Se crearan los WODs en la coleccion <code>wods</code></div>
+          <div class="btn-row">
+            <button class="btn btn-g" id="btn-upload" onclick="bulkUpload()">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v8M4 4l3-3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10v1a1 1 0 001 1h8a1 1 0 001-1v-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Subir todos a Firebase
+            </button>
+            <button class="btn btn-b" onclick="clearBulk()">Cancelar</button>
+          </div>
+          <div class="prog-wrap" id="prog-wrap">
+            <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+            <div class="prog-label" id="prog-label">Subiendo...</div>
+          </div>
+          <div class="status" id="st-bulk"></div>
         </div>
       </div>
-      <div id="wodList"><div class="no-wods">Selecciona un mes para ver los WODs</div></div>
     </div>
 
-    <!-- TAB: BULK -->
-    <div class="tab-panel" id="tab-bulk">
-      <div class="section-title">Carga masiva desde Excel</div>
-
-      <div style="background:var(--card);border:1px solid var(--border);border-left:3px solid var(--blue);padding:16px 20px;margin-bottom:24px;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:8px;">Instrucciones</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.7;">
-          1. Descarga la plantilla Excel de abajo<br>
-          2. Rellena los entrenamientos (una fila = un WOD)<br>
-          3. Guarda el archivo y arrástralo aquí o usa el botón<br>
-          4. Revisa la vista previa y confirma la subida
-        </div>
+    <!-- TAB: VER / ELIMINAR -->
+    <div class="section" id="sec-list">
+      <div class="sec-hdr">
+        <div><div class="sec-hdr-title">WODs en Firebase</div><div class="sec-hdr-sub">Gestiona los entrenamientos subidos</div></div>
+        <button class="btn btn-b" onclick="loadList()">Actualizar</button>
       </div>
-
-      <div style="margin-bottom:20px;">
-        <a id="downloadTemplate" href="#" onclick="downloadPlantilla(event)"
-          style="display:inline-flex;align-items:center;gap:8px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;padding:10px 20px;cursor:pointer;text-decoration:none;transition:all .15s;">
-          ↓ Descargar plantilla Excel
-        </a>
+      <div class="filter-row2" id="list-filters">
+        <div class="pill on" data-m="all" onclick="setMF('all',this)">Todos</div>
       </div>
-
-      <div id="dropZone" style="border:2px dashed var(--border);padding:40px;text-align:center;cursor:pointer;transition:border-color .2s;margin-bottom:20px;"
-        onclick="document.getElementById('excelInput').click()"
-        ondragover="event.preventDefault();this.style.borderColor='var(--red)'"
-        ondragleave="this.style.borderColor='var(--border)'"
-        ondrop="handleDrop(event)">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);">Arrastra el Excel aquí o haz click</div>
-        <div style="font-size:11px;color:var(--border);margin-top:6px;">.xlsx</div>
-        <input type="file" id="excelInput" accept=".xlsx" style="display:none" onchange="handleFile(this.files[0])">
+      <div class="filter-row2" id="sport-list-filters">
+        <div class="pill on" data-sf="all" onclick="setSportFilter('all',this)">Todos</div>
+        <div class="pill" data-sf="running" onclick="setSportFilter('running',this)">Running</div>
+        <div class="pill" data-sf="crossfit" onclick="setSportFilter('crossfit',this)">CrossFit</div>
+        <div class="pill" data-sf="hyrox" onclick="setSportFilter('hyrox',this)">Hyrox</div>
+        <div class="pill" data-sf="deka" onclick="setSportFilter('deka',this)">DEKA</div>
       </div>
-
-      <div id="bulkPreview" style="display:none;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Vista previa — <span id="previewCount">0</span> WODs detectados</div>
-        <div id="previewList" style="display:flex;flex-direction:column;gap:6px;margin-bottom:20px;max-height:320px;overflow-y:auto;"></div>
-        <button class="submit-btn" id="bulkSubmitBtn" onclick="submitBulk()">SUBIR TODOS A FIREBASE</button>
-      </div>
-
-      <div id="bulkProgress" style="display:none;margin-top:16px;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;" id="bulkProgressLabel">Subiendo...</div>
-        <div style="height:3px;background:var(--border);border-radius:2px;overflow:hidden;">
-          <div id="bulkProgressBar" style="height:100%;background:var(--green);width:0%;transition:width .3s;"></div>
-        </div>
-      </div>
+      <div id="wod-list"><div class="empty">Cargando...</div></div>
+      <div class="status" id="st-list"></div>
     </div>
 
   </div>
 </div>
 
-<!-- SheetJS for Excel parsing -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<!-- CONFIRM MODAL -->
+<div class="modal-ov" id="modal-ov">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">Eliminar WOD?</div>
+    <div class="modal-msg" id="modal-msg">Esta accion no se puede deshacer.</div>
+    <div class="modal-btns">
+      <button class="btn btn-b" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-r" id="modal-confirm">Eliminar</button>
+    </div>
+  </div>
+</div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-// Plantilla base64 se genera dinámicamente — usamos SheetJS para crearla en el browser
-window.downloadPlantilla = function(e) {
-  e.preventDefault();
-  if (typeof XLSX === 'undefined') { alert('Cargando librería, espera un momento...'); return; }
-  const wb = XLSX.utils.book_new();
-  const headers = ['fecha','deporte','titulo','intensidad','duracion','volumen','tipo','notas','calentamiento','principal','metcon','enfriamiento'];
-  const examples = [
-    ['2026-04-01','running','Rodaje Z2 — 45 min','baja',"45'",'Bajo','Aeróbico','Mantén FC en zona 2','10 min marcha\nMovilidad tobillos','35 min @ FC zona 2 (65-70%)','','5 min marcha + estiramientos'],
-    ['2026-04-03','hyrox','Simulacro Hyrox — 4 rondas','alta',"70'",'Alto','Específico','Controla el ritmo','15 min activación\nMovilidad caderas','4 rondas:\n1km Ski Erg\n50m Sled Push\n50m Sled Pull\n200m Farmer Carry','100 Wall Balls','Recuperación activa 10 min'],
-    ['2026-04-06','deka','Deka Fit — Circuito','maxima',"75'",'Muy alto','Funcional','Simula el formato real','10 min bici suave','Circuito 10 estaciones:\nRemo 500m\nBurpees 20 rep\nKB Swing 30 rep','','10 min recuperación'],
-  ];
-  const wsData = [headers, ...examples];
-  const ws = XLSX.utils.aoa_to_sheet(wsData);
-  ws['!cols'] = [14,20,28,18,12,12,14,32,36,36,32,32].map(w => ({wch: w}));
-  XLSX.utils.book_append_sheet(wb, ws, 'WODs');
-  XLSX.writeFile(wb, 'plantilla_wods.xlsx');
+const ADMIN_PWD = "ironhawk";
+const FB_CFG = {
+  apiKey:"AIzaSyBtMJBfDEwjV9tOZowC4LAoTPjp2rZFO4U",
+  authDomain:"mariohyrox.firebaseapp.com",
+  projectId:"mariohyrox",
+  storageBucket:"mariohyrox.firebasestorage.app",
+  messagingSenderId:"23933117714",
+  appId:"1:23933117714:web:b1ced10a2fdfef3eb6bfcb"
 };
 
-window.handleDrop = function(e) {
-  e.preventDefault();
-  document.getElementById('dropZone').style.borderColor = 'var(--border)';
-  const file = e.dataTransfer.files[0];
-  if (file) handleFile(file);
-};
+let db = null, _fb = null;
+let bulkWods = [], allWods = [], listFilter = 'all', sportListFilter = 'all';
+let selectedSport = 'running';
 
-let parsedWods = [];
+// ── LOGIN ──
+function dL() {
+  const v = document.getElementById('ac').value;
+  if (v === ADMIN_PWD) {
+    localStorage.setItem('ih_admin','1');
+    document.getElementById('ls').classList.add('h');
+    document.getElementById('app').classList.add('on');
+    initAdmin();
+  } else {
+    document.getElementById('le').classList.add('show');
+  }
+}
+function logout() {
+  localStorage.removeItem('ih_admin');
+  location.reload();
+}
+if (localStorage.getItem('ih_admin') === '1') {
+  document.getElementById('ls').classList.add('h');
+  document.getElementById('app').classList.add('on');
+  window.addEventListener('load', initAdmin);
+}
 
-window.handleFile = function(file) {
-  if (!file) return;
-  document.getElementById('dropZone').style.borderColor = 'var(--green)';
+// ── SPORT SELECTOR ──
+function selSport(sp, el) {
+  selectedSport = sp;
+  document.querySelectorAll('#sport-sel .sport-opt').forEach(o => o.classList.remove('on'));
+  el.classList.add('on');
+}
+
+// ── INIT ──
+async function initAdmin() {
+  try {
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+    const { getFirestore, collection, query, orderBy, getDocs, addDoc, setDoc, deleteDoc, doc, where } =
+      await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    db = getFirestore(initializeApp(FB_CFG));
+    _fb = { collection, query, orderBy, getDocs, addDoc, setDoc, deleteDoc, doc, where };
+    showStatus('st-add', 'ok', 'Conectado a Firebase');
+    setTimeout(() => hideStatus('st-add'), 2500);
+    loadList();
+  } catch(e) {
+    showStatus('st-add', 'err', 'Sin conexion Firebase: ' + e.message);
+  }
+}
+
+// ── TABS ──
+function swTab(t) {
+  ['add','bulk','list'].forEach(x => {
+    document.getElementById('tab-'+x).classList.remove('on');
+    document.getElementById('sec-'+x).classList.remove('on');
+  });
+  document.getElementById('tab-'+t).classList.add('on');
+  document.getElementById('sec-'+t).classList.add('on');
+  if (t === 'list') loadList();
+}
+
+// ── SAVE INDIVIDUAL ──
+async function saveWod() {
+  const fecha = document.getElementById('f-fecha').value;
+  const titulo = document.getElementById('f-titulo').value.trim();
+  const main = document.getElementById('f-main').value.trim();
+  if (!fecha || !titulo || !main) {
+    showStatus('st-add','err','Completa los campos obligatorios: fecha, titulo y parte principal.');
+    return;
+  }
+  if (!db) { showStatus('st-add','err','No hay conexion con Firebase.'); return; }
+  const month = fecha.slice(0,7);
+  const wod = {
+    fecha, month,
+    sport: selectedSport,
+    sede: document.getElementById('f-sede').value || '',
+    titulo,
+    intensity: document.getElementById('f-intensity').value || 'media',
+    duration: document.getElementById('f-duration').value.trim(),
+    volume: document.getElementById('f-volume').value,
+    type: document.getElementById('f-type').value,
+    notes: document.getElementById('f-notes').value.trim(),
+    warmup: document.getElementById('f-warmup').value.trim(),
+    main,
+    metcon: document.getElementById('f-metcon').value.trim(),
+    cooldown: document.getElementById('f-cooldown').value.trim(),
+  };
+  Object.keys(wod).forEach(k => { if (wod[k] === '') delete wod[k]; });
+  wod.fecha = fecha; wod.month = month; wod.sport = selectedSport;
+  showStatus('st-add','loading','Guardando...');
+  try {
+    await _fb.addDoc(_fb.collection(db,'wods'), wod);
+    showStatus('st-add','ok','WOD de ' + selectedSport + ' guardado correctamente');
+    clearForm();
+  } catch(e) {
+    showStatus('st-add','err','Error: ' + e.message);
+  }
+}
+
+function clearForm() {
+  ['f-fecha','f-sede','f-titulo','f-type','f-duration','f-volume','f-notes','f-warmup','f-main','f-metcon','f-cooldown']
+    .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('f-intensity').value = 'media';
+}
+
+// ── EXCEL PARSE ──
+function dzOver(e) { e.preventDefault(); document.getElementById('dz').classList.add('over'); }
+function dzLeave() { document.getElementById('dz').classList.remove('over'); }
+function dzDrop(e) { e.preventDefault(); dzLeave(); const f = e.dataTransfer.files[0]; if(f) parseExcel(f); }
+function dzFile(inp) { if(inp.files[0]) parseExcel(inp.files[0]); }
+
+function parseExcel(file) {
+  showStatus('st-parse','loading','Leyendo archivo...');
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = e => {
     try {
-      const wb = XLSX.read(e.target.result, { type: 'array', cellText: true, cellDates: false });
+      const wb = XLSX.read(e.target.result, { type:'array' });
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-      const headers = rows[0];
-      parsedWods = [];
-      for (let i = 1; i < rows.length; i++) {
-        const row = rows[i];
-        if (!row[0] || !row[1] || !row[2]) continue; // skip empty
-        const wod = {};
-        headers.forEach((h, idx) => { if (row[idx] !== undefined && row[idx] !== '') wod[h] = String(row[idx]); });
-        if (wod.fecha && wod.deporte && wod.titulo) {
-          // Auto-compute month
-          const parts = wod.fecha.split('-');
-          if (parts.length >= 2) wod.month = `${parts[0]}-${parts[1]}`;
-          parsedWods.push(wod);
-        }
-      }
-      renderPreview();
+      const rows = XLSX.utils.sheet_to_json(ws, { defval:'' });
+      const wods = rows.filter(r => r.fecha && String(r.fecha).match(/\d{4}-\d{2}-\d{2}/)).map(r => {
+        const w = {};
+        const map = {
+          fecha:'fecha',month:'month',sport:'sport',sede:'sede',titulo:'titulo',
+          intensity:'intensity',duration:'duration',volume:'volume',type:'type',
+          notes:'notes',warmup:'warmup',main:'main',metcon:'metcon',cooldown:'cooldown'
+        };
+        Object.entries(map).forEach(([k,v]) => { if (r[v] !== undefined && r[v] !== '') w[k] = String(r[v]).trim(); });
+        // Fallback columns
+        if (!w.sport) w.sport = r['Deporte'] ? String(r['Deporte']).trim().toLowerCase() : 'running';
+        if (!w.month && w.fecha) w.month = w.fecha.slice(0,7);
+        return w;
+      }).filter(w => w.fecha && w.titulo);
+
+      if (!wods.length) { showStatus('st-parse','err','No se encontraron WODs validos.'); return; }
+      bulkWods = wods;
+      showStatus('st-parse','ok', wods.length + ' WODs encontrados');
+      renderPreview(wods);
     } catch(err) {
-      alert('Error leyendo el archivo: ' + err.message);
+      showStatus('st-parse','err','Error al leer: ' + err.message);
     }
   };
   reader.readAsArrayBuffer(file);
-};
-
-function renderPreview() {
-  const container = document.getElementById('previewList');
-  document.getElementById('previewCount').textContent = parsedWods.length;
-  const sportColors = { running:'rgba(46,204,113,0.15)', hyrox:'rgba(79,163,224,0.15)', deka:'rgba(255,107,0,0.15)', crossfit:'rgba(232,33,46,0.15)' };
-  const sportText = { running:'#2ecc71', hyrox:'#4fa3e0', deka:'#ff6b00', crossfit:'#e8212e' };
-  let html = '';
-  parsedWods.forEach((w, i) => {
-    const bg = sportColors[w.deporte] || 'rgba(255,255,255,0.05)';
-    const col = sportText[w.deporte] || '#8a8f9e';
-    html += `<div style="background:${bg};border:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:12px;">
-      <span style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--muted);min-width:40px;">${w.fecha ? w.fecha.split('-')[2] : '?'}</span>
-      <span style="font-family:'Barlow Condensed',sans-serif;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;border:1px solid ${col};color:${col};padding:2px 7px;">${w.deporte||'?'}</span>
-      <span style="font-size:13px;color:var(--white);flex:1;">${w.titulo||'Sin título'}</span>
-      <span style="font-size:11px;color:var(--muted);">${w.intensidad||''}</span>
-    </div>`;
-  });
-  container.innerHTML = html || '<div style="color:var(--muted);font-size:13px;">No se encontraron filas válidas. Comprueba que usas la plantilla correcta.</div>';
-  document.getElementById('bulkPreview').style.display = 'block';
 }
 
-window.submitBulk = async function() {
-  if (!parsedWods.length) return;
-  if (!window._db) { alert('Firebase no está configurado todavía.'); return; }
-  const btn = document.getElementById('bulkSubmitBtn');
-  btn.disabled = true;
-  document.getElementById('bulkProgress').style.display = 'block';
-  const { collection, addDoc } = window._firestoreModules;
-  let done = 0;
-  for (const wod of parsedWods) {
+function renderPreview(wods) {
+  document.getElementById('preview-section').style.display = 'block';
+  document.getElementById('prev-count').textContent = wods.length + ' WODs encontrados';
+  const iMap = {baja:'badge-gr',media:'badge-bl',alta:'badge-or',maxima:'badge-rd'};
+  const spMap = {running:'badge-gr',crossfit:'badge-rd',hyrox:'badge-pu',deka:'badge-or'};
+  let thead = '<tr><th>Fecha</th><th>Deporte</th><th>Sede</th><th>Titulo</th><th>Tipo</th><th>Int.</th><th>Dur.</th></tr>';
+  let tbody = wods.map(w =>
+    '<tr><td>'+( w.fecha||'')+'</td><td><span class="badge '+(spMap[w.sport]||'badge-bl')+'">'+(w.sport||'—')+'</span></td><td>'+(w.sede||'')+'</td><td>'+(w.titulo||'')+'</td><td>'+(w.type||'')+'</td>'
+    + '<td><span class="badge '+(iMap[w.intensity]||'badge-bl')+'">'+(w.intensity||'—')+'</span></td>'
+    + '<td>'+(w.duration||'—')+'</td></tr>'
+  ).join('');
+  document.getElementById('prev-table').querySelector('thead').innerHTML = thead;
+  document.getElementById('prev-table').querySelector('tbody').innerHTML = tbody;
+}
+
+// ── BULK UPLOAD ──
+async function bulkUpload() {
+  if (!db || !_fb) { showStatus('st-bulk','err','Sin conexion Firebase.'); return; }
+  if (!bulkWods.length) { showStatus('st-bulk','err','No hay WODs para subir.'); return; }
+  document.getElementById('btn-upload').disabled = true;
+  document.getElementById('prog-wrap').classList.add('show');
+  showStatus('st-bulk','loading','Subiendo...');
+  let ok = 0, fail = 0;
+  for (let i = 0; i < bulkWods.length; i++) {
+    const w = { ...bulkWods[i] };
+    Object.keys(w).forEach(k => { if (w[k] === '' || w[k] === undefined) delete w[k]; });
     try {
-      wod.createdAt = new Date().toISOString();
-      await addDoc(collection(window._db, 'wods'), wod);
-    } catch(err) { console.error('Error subiendo WOD', wod.fecha, err); }
-    done++;
-    const pct = Math.round((done / parsedWods.length) * 100);
-    document.getElementById('bulkProgressBar').style.width = pct + '%';
-    document.getElementById('bulkProgressLabel').textContent = `Subiendo ${done} de ${parsedWods.length}...`;
+      await _fb.addDoc(_fb.collection(db,'wods'), w);
+      ok++;
+    } catch(e) { fail++; }
+    const pct = Math.round(((i+1)/bulkWods.length)*100);
+    document.getElementById('prog-fill').style.width = pct + '%';
+    document.getElementById('prog-label').textContent = (i+1) + ' / ' + bulkWods.length + ' WODs subidos';
   }
-  document.getElementById('bulkProgressLabel').textContent = `✓ ${done} WODs subidos correctamente`;
-  document.getElementById('bulkProgressBar').style.background = 'var(--green)';
-  btn.disabled = false;
-  parsedWods = [];
-};
-</script>
-
-<!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-  // ============================================================
-  // 🔧 CONFIGURACIÓN FIREBASE — misma que en index.html
-  // ============================================================
-const firebaseConfig = {
-  apiKey: "AIzaSyBtMJBfDEwjV9tOZowC4LAoTPjp2rZFO4U",
-  authDomain: "mariohyrox.firebaseapp.com",
-  projectId: "mariohyrox",
-  storageBucket: "mariohyrox.firebasestorage.app",
-  messagingSenderId: "23933117714",
-  appId: "1:23933117714:web:b1ced10a2fdfef3eb6bfcb"
-};
-  // ============================================================
-
-  const ADMIN_PASSWORD = "adminapp2026"; // 🔑 Contraseña del admin (diferente a la de usuario)
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  window._db = db;
-  window._firestoreModules = { collection, addDoc, query, where, getDocs, deleteDoc, doc };
-
-  window.checkAdmin = function() {
-    const val = document.getElementById('adminPass').value;
-    if (val === ADMIN_PASSWORD) {
-      sessionStorage.setItem('admin_auth', '1');
-      document.getElementById('loginScreen').classList.add('hidden');
-      document.getElementById('adminPanel').classList.add('visible');
-      // Set today's date as default
-      const today = new Date().toISOString().split('T')[0];
-      document.getElementById('f-date').value = today;
-      const now = new Date();
-      document.getElementById('listMonth').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-    } else {
-      document.getElementById('adminError').classList.add('show');
-    }
-  };
-
-  if (sessionStorage.getItem('admin_auth') === '1') {
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('adminPanel').classList.add('visible');
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('f-date').value = today;
-    const now = new Date();
-    document.getElementById('listMonth').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  document.getElementById('btn-upload').disabled = false;
+  if (fail === 0) {
+    showStatus('st-bulk','ok', ok + ' WODs subidos correctamente a Firebase');
+  } else {
+    showStatus('st-bulk','err', ok + ' subidos, ' + fail + ' fallaron.');
   }
+}
 
-  window.adminLogout = function() {
-    sessionStorage.removeItem('admin_auth');
-    location.reload();
-  };
+function clearBulk() {
+  bulkWods = [];
+  document.getElementById('preview-section').style.display = 'none';
+  document.getElementById('prog-wrap').classList.remove('show');
+  hideStatus('st-bulk'); hideStatus('st-parse');
+  document.getElementById('prog-fill').style.width = '0%';
+}
 
-  window.switchTab = function(tab, btn) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('tab-' + tab).classList.add('active');
-    if (tab === 'list') loadWodList();
-  };
-
-  function showAlert(type, msg) {
-    const el = document.getElementById('alert' + (type === 'success' ? 'Success' : 'Error'));
-    if (msg) el.textContent = msg;
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 4000);
+// ── LIST ──
+async function loadList() {
+  if (!db || !_fb) { document.getElementById('wod-list').innerHTML = '<div class="empty">Sin conexion Firebase</div>'; return; }
+  document.getElementById('wod-list').innerHTML = '<div class="empty">Cargando...</div>';
+  try {
+    const snap = await _fb.getDocs(_fb.query(_fb.collection(db,'wods'), _fb.orderBy('fecha','asc')));
+    allWods = [];
+    snap.forEach(d => allWods.push({ id:d.id, ...d.data() }));
+    buildMonthFilters();
+    renderList();
+  } catch(e) {
+    document.getElementById('wod-list').innerHTML = '<div class="empty">Error: ' + e.message + '</div>';
   }
+}
 
-  window.submitWod = async function(e) {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.textContent = 'GUARDANDO...';
+function buildMonthFilters() {
+  const months = [...new Set(allWods.map(w => w.month||w.fecha?.slice(0,7)||'').filter(Boolean))].sort();
+  const MN = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  let html = '<div class="pill on" data-m="all" onclick="setMF(\'all\',this)">Todos</div>';
+  months.forEach(m => {
+    const [y,mo] = m.split('-');
+    html += '<div class="pill" data-m="'+m+'" onclick="setMF(\''+m+'\',this)">'+MN[parseInt(mo)-1]+' '+y+'</div>';
+  });
+  document.getElementById('list-filters').innerHTML = html;
+}
 
-    const dateVal = document.getElementById('f-date').value;
-    const [y, m] = dateVal.split('-');
+function setMF(m, el) {
+  listFilter = m;
+  document.querySelectorAll('#list-filters .pill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  renderList();
+}
 
-    const wod = {
-      date: dateVal,
-      month: `${y}-${m}`,
-      sport: document.getElementById('f-sport').value,
-      title: document.getElementById('f-title').value,
-      intensity: document.getElementById('f-intensity').value,
-      duration: document.getElementById('f-duration').value,
-      volume: document.getElementById('f-volume').value,
-      type: document.getElementById('f-type').value,
-      notes: document.getElementById('f-notes').value,
-      warmup: document.getElementById('f-warmup').value,
-      main: document.getElementById('f-main').value,
-      metcon: document.getElementById('f-metcon').value,
-      cooldown: document.getElementById('f-cooldown').value,
-      createdAt: new Date().toISOString(),
-    };
+function setSportFilter(sf, el) {
+  sportListFilter = sf;
+  document.querySelectorAll('#sport-list-filters .pill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  renderList();
+}
 
-    // Remove empty fields
-    Object.keys(wod).forEach(k => { if (!wod[k]) delete wod[k]; });
-    wod.date = dateVal; wod.month = `${y}-${m}`; // always keep these
+function renderList() {
+  let filtered = listFilter === 'all' ? allWods : allWods.filter(w => (w.month||w.fecha?.slice(0,7)) === listFilter);
+  if (sportListFilter !== 'all') {
+    filtered = filtered.filter(w => (w.sport||'running') === sportListFilter);
+  }
+  if (!filtered.length) { document.getElementById('wod-list').innerHTML = '<div class="empty">No hay WODs con ese filtro</div>'; return; }
+  const spMap = {running:'badge-gr',crossfit:'badge-rd',hyrox:'badge-pu',deka:'badge-or'};
+  document.getElementById('wod-list').innerHTML = filtered.map(w =>
+    '<div class="wod-row">'
+    + '<span class="wr-date">'+(w.fecha||'')+'</span>'
+    + '<span class="badge '+(spMap[w.sport||'running']||'badge-bl')+'" style="margin-right:6px;min-width:60px;justify-content:center">'+(w.sport||'running')+'</span>'
+    + '<div style="flex:1;min-width:0">'
+    + '<div class="wr-title">'+(w.titulo||w.title||'Sin titulo')+'</div>'
+    + '<div class="wr-sede">'+(w.sede||'')+' '+(w.type?'· '+w.type:'')+'</div>'
+    + '</div>'
+    + '<button class="wr-del" onclick="confirmDel(\''+w.id+'\',\''+( w.titulo||w.title||'').replace(/'/g,"\\'")+'\')">Eliminar</button>'
+    + '</div>'
+  ).join('');
+}
 
-    try {
-      await addDoc(collection(db, 'wods'), wod);
-      showAlert('success');
-      document.getElementById('wodForm').reset();
-      document.getElementById('f-date').value = dateVal;
-    } catch(err) {
-      console.error(err);
-      showAlert('error', '✗ Error: ' + err.message);
-    }
+// ── DELETE ──
+let pendingDelId = null;
+function confirmDel(id, title) {
+  pendingDelId = id;
+  document.getElementById('modal-title').textContent = 'Eliminar WOD';
+  document.getElementById('modal-msg').innerHTML = 'Eliminar <strong>'+title+'</strong>?<br>Esta accion no se puede deshacer.';
+  document.getElementById('modal-confirm').onclick = () => doDelete();
+  document.getElementById('modal-ov').classList.add('open');
+}
+function closeModal() { document.getElementById('modal-ov').classList.remove('open'); pendingDelId = null; }
+async function doDelete() {
+  closeModal();
+  if (!pendingDelId || !db || !_fb) return;
+  try {
+    await _fb.deleteDoc(_fb.doc(db,'wods',pendingDelId));
+    allWods = allWods.filter(w => w.id !== pendingDelId);
+    buildMonthFilters();
+    renderList();
+    showStatus('st-list','ok','WOD eliminado');
+    setTimeout(()=>hideStatus('st-list'),2500);
+  } catch(e) {
+    showStatus('st-list','err','Error al eliminar: '+e.message);
+  }
+  pendingDelId = null;
+}
 
-    btn.disabled = false;
-    btn.textContent = 'GUARDAR EN FIREBASE';
-  };
+// ── HELPERS ──
+function showStatus(id, type, msg) {
+  const el = document.getElementById(id);
+  el.className = 'status show ' + type;
+  el.textContent = msg;
+}
+function hideStatus(id) { document.getElementById(id).className = 'status'; }
 
-  window.loadWodList = async function() {
-    const monthVal = document.getElementById('listMonth').value;
-    const sportVal = document.getElementById('listSport').value;
-    const container = document.getElementById('wodList');
-    if (!monthVal) return;
-
-    container.innerHTML = '<div class="no-wods">Cargando...</div>';
-
-    try {
-      let q;
-      if (sportVal) {
-        q = query(collection(db,'wods'), where('month','==',monthVal), where('sport','==',sportVal));
-      } else {
-        q = query(collection(db,'wods'), where('month','==',monthVal));
-      }
-      const snap = await getDocs(q);
-      const wods = [];
-      snap.forEach(d => wods.push({ id: d.id, ...d.data() }));
-      wods.sort((a,b) => a.date.localeCompare(b.date));
-
-      if (wods.length === 0) {
-        container.innerHTML = '<div class="no-wods">No hay WODs este mes con ese filtro</div>';
-        return;
-      }
-
-      const sportLabels = { running:'Running', hyrox:'Hyrox', deka:'Deka', crossfit:'CrossFit' };
-      const MONTH_NAMES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-      let html = '<div class="wod-list">';
-      wods.forEach(w => {
-        const parts = w.date.split('-');
-        const day = parts[2];
-        const mon = MONTH_NAMES[parseInt(parts[1])-1];
-        html += `<div class="wod-item">
-          <div class="wod-item-date">${day}<br><span style="font-size:12px;font-family:'Barlow Condensed',sans-serif;">${mon}</span></div>
-          <span class="wod-item-sport sport-${w.sport}">${sportLabels[w.sport]||w.sport}</span>
-          <div class="wod-item-title">${w.title||'Sin título'}</div>
-          <div class="wod-item-actions">
-            <button class="btn-delete" onclick="deleteWod('${w.id}')">ELIMINAR</button>
-          </div>
-        </div>`;
-      });
-      html += '</div>';
-      container.innerHTML = html;
-    } catch(err) {
-      container.innerHTML = `<div class="no-wods">Error: ${err.message}</div>`;
-    }
-  };
-
-  window.deleteWod = async function(id) {
-    if (!confirm('¿Eliminar este WOD? Esta acción no se puede deshacer.')) return;
-    try {
-      await deleteDoc(doc(db, 'wods', id));
-      showAlert('success', '✓ WOD eliminado correctamente');
-      loadWodList();
-    } catch(err) {
-      showAlert('error', '✗ Error al eliminar: ' + err.message);
-    }
-  };
-
+window.dL=dL; window.logout=logout; window.swTab=swTab; window.saveWod=saveWod; window.clearForm=clearForm;
+window.dzOver=dzOver; window.dzLeave=dzLeave; window.dzDrop=dzDrop; window.dzFile=dzFile;
+window.bulkUpload=bulkUpload; window.clearBulk=clearBulk;
+window.loadList=loadList; window.setMF=setMF; window.setSportFilter=setSportFilter;
+window.confirmDel=confirmDel; window.closeModal=closeModal; window.selSport=selSport;
 </script>
 </body>
 </html>
