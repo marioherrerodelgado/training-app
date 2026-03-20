@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRAIN — Tu planificación de entrenamientos</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #111318;
+    --card: #181c24;
+    --border: #252a35;
+    --red: #e8212e;
+    --red-dim: #7a1118;
+    --orange: #ff6b00;
+    --gold: #f5c842;
+    --white: #f0eeea;
+    --muted: #8a8f9e;
+    --green: #2ecc71;
+    --blue: #4fa3e0;
+    --purple: #9b59b6;
+    --teal: #1abc9c;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--black); color:var(--white); font-family:'Barlow',sans-serif; min-height:100vh; overflow-x:hidden; }
+  body::before {
+    content:''; position:fixed; inset:0;
+    background:
+      repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(232,33,46,0.025) 40px,rgba(232,33,46,0.025) 41px),
+      repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(232,33,46,0.025) 40px,rgba(232,33,46,0.025) 41px);
+    pointer-events:none; z-index:0;
+  }
+
+  /* LOGIN SCREEN */
+  .login-screen {
+    position:fixed; inset:0; background:var(--black); z-index:200;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:0;
+  }
+  .login-screen.hidden { display:none; }
+  .login-box {
+    background:var(--dark); border:1px solid var(--border); border-top:3px solid var(--red);
+    padding:40px 48px; width:100%; max-width:400px;
+  }
+  .login-logo { font-family:'Bebas Neue',sans-serif; font-size:52px; line-height:1; margin-bottom:4px; letter-spacing:2px; }
+  .login-logo span { color:var(--red); }
+  .login-sub { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--muted); margin-bottom:36px; }
+  .login-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:8px; }
+  .login-input {
+    width:100%; background:rgba(255,255,255,0.04); border:1px solid var(--border);
+    border-radius:2px; padding:12px 16px; color:var(--white); font-family:'Barlow',sans-serif; font-size:15px;
+    outline:none; transition:border-color .2s; margin-bottom:24px;
+  }
+  .login-input:focus { border-color:var(--red-dim); }
+  .login-btn {
+    width:100%; background:var(--red); border:none; color:var(--white); font-family:'Bebas Neue',sans-serif;
+    font-size:22px; letter-spacing:3px; padding:13px; cursor:pointer; transition:background .15s;
+  }
+  .login-btn:hover { background:#c5131f; }
+  .login-error { font-size:12px; color:var(--red); font-family:'Barlow Condensed',sans-serif; letter-spacing:1px; margin-top:12px; display:none; }
+  .login-error.show { display:block; }
+
+  /* HEADER */
+  header {
+    position:relative; z-index:10;
+    padding:28px 32px 0;
+    display:flex; align-items:flex-end; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+  .logo-eyebrow { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--red); font-weight:600; margin-bottom:4px; }
+  h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(44px,7vw,88px); line-height:.9; letter-spacing:2px; }
+  h1 span { color:var(--red); }
+  .header-right { display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+  .month-display { font-family:'Bebas Neue',sans-serif; font-size:clamp(22px,4vw,44px); color:var(--muted); letter-spacing:2px; text-transform:uppercase; line-height:1; }
+
+  /* SPORT FILTER */
+  .sport-nav {
+    position:relative; z-index:10;
+    padding:20px 32px 0;
+    display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+  }
+  .sport-btn {
+    font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase;
+    font-weight:700; padding:7px 16px; border:1px solid var(--border); background:transparent;
+    color:var(--muted); cursor:pointer; transition:all .15s; border-radius:2px;
+  }
+  .sport-btn:hover { border-color:var(--red-dim); color:var(--white); }
+  .sport-btn.active { background:var(--red); border-color:var(--red); color:var(--white); }
+  .sport-btn[data-sport="running"].active { background:var(--green); border-color:var(--green); color:#0a0a0a; }
+  .sport-btn[data-sport="hyrox"].active { background:var(--blue); border-color:var(--blue); color:var(--white); }
+  .sport-btn[data-sport="deka"].active { background:var(--orange); border-color:var(--orange); color:var(--white); }
+  .month-nav-btns { margin-left:auto; display:flex; gap:6px; align-items:center; }
+  .mnav { background:transparent; border:1px solid var(--border); color:var(--muted); width:32px; height:32px; cursor:pointer; font-size:16px; transition:all .15s; }
+  .mnav:hover { border-color:var(--red); color:var(--white); }
+  .mnav-label { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; min-width:80px; text-align:center; }
+
+  /* LEGEND */
+  .legend {
+    background:var(--card); border:1px solid var(--border); border-left:3px solid var(--red);
+    padding:12px 20px; margin:16px 32px 0;
+    display:flex; flex-wrap:wrap; gap:8px 20px; position:relative; z-index:5;
+  }
+  .legend-item { font-size:12px; color:var(--muted); font-family:'Barlow Condensed',sans-serif; letter-spacing:.5px; display:flex; align-items:center; gap:6px; }
+  .legend-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+  /* CALENDAR */
+  .calendar { padding:24px 32px; position:relative; z-index:5; }
+  .week-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--red); font-weight:600; margin-bottom:8px; margin-top:24px; }
+  .week-label:first-child { margin-top:0; }
+  .days-row { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-bottom:6px; }
+  @media(max-width:900px){ .days-row { grid-template-columns:repeat(4,1fr); } }
+  @media(max-width:540px){ .days-row { grid-template-columns:repeat(2,1fr); } }
+
+  .day-card { background:var(--card); border:1px solid var(--border); border-radius:2px; overflow:hidden; cursor:pointer; transition:transform .15s,border-color .15s; position:relative; }
+  .day-card:hover { transform:translateY(-2px); border-color:var(--red-dim); }
+  .day-card.rest { opacity:.35; cursor:default; pointer-events:none; }
+  .day-card.empty-day { opacity:.2; cursor:default; pointer-events:none; }
+  .day-card.today .day-num { color:var(--red); }
+  .day-card.today .day-header { background:rgba(232,33,46,0.08); }
+  .day-header { display:flex; justify-content:space-between; align-items:center; padding:6px 10px; background:rgba(255,255,255,0.03); border-bottom:1px solid var(--border); }
+  .day-name { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:600; }
+  .day-num { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--white); line-height:1; }
+  .day-body { padding:10px; min-height:72px; }
+  .tag { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:2px 6px; border-radius:1px; margin-bottom:5px; font-weight:700; }
+  .tag-hyrox  { background:rgba(79,163,224,0.15); color:var(--blue); }
+  .tag-running{ background:rgba(46,204,113,0.15); color:var(--green); }
+  .tag-deka   { background:rgba(255,107,0,0.15); color:var(--orange); }
+  .tag-rest   { background:rgba(138,143,158,0.1); color:var(--muted); }
+  .tag-crossfit{ background:rgba(232,33,46,0.15); color:var(--red); }
+  .day-desc { font-size:11px; color:var(--muted); line-height:1.45; }
+  .difficulty { display:inline-flex; align-items:center; gap:4px; font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:1px; text-transform:uppercase; padding:2px 7px; border-radius:10px; font-weight:700; margin-top:4px; }
+  .diff-easy   { background:rgba(46,204,113,0.12); color:var(--green); }
+  .diff-medium { background:rgba(245,200,66,0.12); color:var(--gold); }
+  .diff-hard   { background:rgba(232,33,46,0.12); color:var(--red); }
+
+  /* LOADING */
+  .loading-state { text-align:center; padding:60px 32px; color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:3px; text-transform:uppercase; }
+  .loading-bar { width:120px; height:2px; background:var(--border); margin:12px auto 0; overflow:hidden; }
+  .loading-bar-inner { width:40%; height:100%; background:var(--red); animation:loadpulse 1.2s ease-in-out infinite; }
+  @keyframes loadpulse { 0%{transform:translateX(-100%)} 100%{transform:translateX(350%)} }
+  .empty-month { text-align:center; padding:60px 32px; color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; }
+
+  /* MODAL */
+  .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); backdrop-filter:blur(4px); z-index:100; align-items:center; justify-content:center; padding:20px; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--dark); border:1px solid var(--border); border-top:3px solid var(--red); max-width:560px; width:100%; max-height:88vh; overflow-y:auto; animation:slideUp .25s ease; }
+  @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .modal-header { padding:22px 28px 14px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:flex-start; }
+  .modal-date { font-family:'Bebas Neue',sans-serif; font-size:38px; line-height:1; }
+  .modal-day { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; color:var(--red); text-transform:uppercase; font-weight:600; margin-top:2px; }
+  .modal-close { background:none; border:none; color:var(--muted); font-size:24px; cursor:pointer; padding:4px 8px; transition:color .15s; }
+  .modal-close:hover { color:var(--white); }
+  .modal-body { padding:20px 28px 28px; }
+  .modal-sport-tag { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; font-weight:700; padding:4px 12px; border:1px solid; margin-bottom:16px; }
+  .modal-sport-hyrox  { border-color:var(--blue); color:var(--blue); }
+  .modal-sport-running{ border-color:var(--green); color:var(--green); }
+  .modal-sport-deka   { border-color:var(--orange); color:var(--orange); }
+  .modal-sport-crossfit{ border-color:var(--red); color:var(--red); }
+  .modal-diff-row { display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap; }
+  .tip-box { background:rgba(79,163,224,0.06); border:1px solid rgba(79,163,224,0.2); border-left:3px solid var(--blue); padding:12px 16px; margin-bottom:18px; font-size:13px; color:var(--muted); line-height:1.6; }
+  .tip-box strong { color:var(--blue); font-family:'Barlow Condensed',sans-serif; letter-spacing:1px; text-transform:uppercase; display:block; margin-bottom:4px; font-size:11px; }
+  .workout-block { margin-bottom:16px; }
+  .workout-title { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--muted); margin-bottom:8px; font-weight:600; }
+  .workout-item { display:flex; align-items:flex-start; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; color:var(--white); line-height:1.55; }
+  .workout-item:last-child { border-bottom:none; }
+  .workout-bullet { width:5px; height:5px; border-radius:50%; background:var(--red); flex-shrink:0; margin-top:6px; }
+  .stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:18px; }
+  .stat-box { background:rgba(255,255,255,0.04); border:1px solid var(--border); padding:10px; }
+  .stat-label { font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+  .stat-val { font-family:'Bebas Neue',sans-serif; font-size:22px; color:var(--white); line-height:1; }
+
+  ::-webkit-scrollbar { width:4px; }
+  ::-webkit-scrollbar-track { background:var(--black); }
+  ::-webkit-scrollbar-thumb { background:var(--red-dim); }
+
+  .app-content { display:none; }
+  .app-content.visible { display:block; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">TRAIN<span>.</span></div>
+    <div class="login-sub">Acceso exclusivo — introduce tu código</div>
+    <label class="login-label">Código de acceso</label>
+    <input type="password" class="login-input" id="accessCode" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkLogin()">
+    <button class="login-btn" onclick="checkLogin()">ENTRAR</button>
+    <div class="login-error" id="loginError">Código incorrecto. Contacta con tu entrenador.</div>
+  </div>
+</div>
+
+<!-- APP CONTENT -->
+<div class="app-content" id="appContent">
+
+  <header>
+    <div>
+      <div class="logo-eyebrow">Planificación de entrenamiento</div>
+      <h1 id="appTitle">TRAIN<span>.</span></h1>
+    </div>
+    <div class="header-right">
+      <div class="month-display" id="headerMonth">Cargando...</div>
+    </div>
+  </header>
+
+  <div class="sport-nav">
+    <button class="sport-btn active" data-sport="all" onclick="filterSport('all',this)">Todos</button>
+    <button class="sport-btn" data-sport="running" onclick="filterSport('running',this)">🏃 Running</button>
+    <button class="sport-btn" data-sport="hyrox" onclick="filterSport('hyrox',this)">⚡ Hyrox</button>
+    <button class="sport-btn" data-sport="deka" onclick="filterSport('deka',this)">🔥 Deka</button>
+    <div class="month-nav-btns">
+      <button class="mnav" onclick="changeMonth(-1)">‹</button>
+      <span class="mnav-label" id="navMonthLabel">Mar 2026</span>
+      <button class="mnav" onclick="changeMonth(1)">›</button>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot" style="background:var(--green)"></span>Running</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>Hyrox</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span>Deka</div>
+    <div class="legend-item"><span class="legend-dot" style="background:var(--muted)"></span>Descanso</div>
+  </div>
+
+  <div class="calendar" id="calendarContainer">
+    <div class="loading-state">Cargando entrenamientos<div class="loading-bar"><div class="loading-bar-inner"></div></div></div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeOnOverlay(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div><div class="modal-date" id="modalDate"></div><div class="modal-day" id="modalDay"></div></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // ============================================================
+  // 🔧 CONFIGURACIÓN FIREBASE — reemplaza con tus datos
+  // ============================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyBtMJBfDEwjV9tOZowC4LAoTPjp2rZFO4U",
+  authDomain: "mariohyrox.firebaseapp.com",
+  projectId: "mariohyrox",
+  storageBucket: "mariohyrox.firebasestorage.app",
+  messagingSenderId: "23933117714",
+  appId: "1:23933117714:web:b1ced10a2fdfef3eb6bfcb"
+};
+  // ============================================================
+
+  const ACCESS_PASSWORD = "ironhawk26"; // 🔑 Cambia esta contraseña
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window._db = db;
+  window._firestoreModules = { collection, query, where, getDocs };
+
+  // LOGIN
+  window.checkLogin = function() {
+    const val = document.getElementById('accessCode').value;
+    if (val === ACCESS_PASSWORD) {
+      localStorage.setItem('train_auth', '1');
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('appContent').classList.add('visible');
+      loadCalendar();
+    } else {
+      document.getElementById('loginError').classList.add('show');
+    }
+  };
+
+  // Auto-login si ya está autenticado
+  if (localStorage.getItem('train_auth') === '1') {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('appContent').classList.add('visible');
+  }
+
+  // STATE
+  let currentYear = new Date().getFullYear();
+  let currentMonth = new Date().getMonth(); // 0-indexed
+  let allWods = [];
+  let currentFilter = 'all';
+
+  const MONTH_NAMES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const DAY_NAMES   = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const today = new Date();
+
+  window.filterSport = function(sport, btn) {
+    currentFilter = sport;
+    document.querySelectorAll('.sport-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCalendar();
+  };
+
+  window.changeMonth = function(dir) {
+    currentMonth += dir;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    if (currentMonth < 0)  { currentMonth = 11; currentYear--; }
+    loadCalendar();
+  };
+
+  async function loadCalendar() {
+    const container = document.getElementById('calendarContainer');
+    container.innerHTML = '<div class="loading-state">Cargando entrenamientos<div class="loading-bar"><div class="loading-bar-inner"></div></div></div>';
+
+    const label = `${MONTH_NAMES[currentMonth]} ${currentYear}`;
+    document.getElementById('headerMonth').textContent = label;
+    document.getElementById('navMonthLabel').textContent = `${MONTH_NAMES[currentMonth].slice(0,3)} ${currentYear}`;
+
+    try {
+      const { collection, query, where, getDocs } = window._firestoreModules;
+      const db = window._db;
+      const monthStr = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}`;
+      const q = query(collection(db,'wods'), where('month','==', monthStr));
+      const snap = await getDocs(q);
+      allWods = [];
+      snap.forEach(doc => allWods.push({ id: doc.id, ...doc.data() }));
+    } catch(e) {
+      console.warn('Firebase error, using demo data', e);
+      allWods = getDemoData();
+    }
+
+    renderCalendar();
+  }
+
+  function renderCalendar() {
+    const container = document.getElementById('calendarContainer');
+    const filtered = currentFilter === 'all' ? allWods : allWods.filter(w => w.sport === currentFilter);
+
+    const firstDay = new Date(currentYear, currentMonth, 1);
+    const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
+    let startDow = firstDay.getDay(); // 0=Sun
+    startDow = startDow === 0 ? 6 : startDow - 1; // Monday=0
+
+    const wodMap = {};
+    filtered.forEach(w => {
+      const d = parseInt(w.date.split('-')[2]);
+      if (!wodMap[d]) wodMap[d] = [];
+      wodMap[d].push(w);
+    });
+
+    // Build weeks
+    const weeks = [];
+    let week = new Array(startDow).fill(null);
+    for (let d = 1; d <= daysInMonth; d++) {
+      week.push(d);
+      if (week.length === 7) { weeks.push(week); week = []; }
+    }
+    if (week.length > 0) { while(week.length < 7) week.push(null); weeks.push(week); }
+
+    let html = '';
+    if (filtered.length === 0 && currentFilter !== 'all') {
+      html = `<div class="empty-month">No hay entrenamientos de ${currentFilter} este mes</div>`;
+    } else {
+      weeks.forEach((wk, wi) => {
+        const startD = wk.find(x => x !== null);
+        const endD   = [...wk].reverse().find(x => x !== null);
+        html += `<div class="week-label">Semana ${wi+1} · ${startD ? startD : ''}${endD && endD !== startD ? ' — ' + endD : ''} ${MONTH_NAMES[currentMonth].slice(0,3)}</div>`;
+        html += `<div class="days-row">`;
+        wk.forEach(day => {
+          if (day === null) {
+            html += `<div class="day-card empty-day"><div class="day-header"><span class="day-name">—</span><span class="day-num">·</span></div><div class="day-body"></div></div>`;
+          } else {
+            const isToday = day === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear();
+            const dow = DAY_NAMES[new Date(currentYear, currentMonth, day).getDay() === 0 ? 6 : new Date(currentYear, currentMonth, day).getDay() - 1];
+            const wods = wodMap[day] || [];
+            const hasWod = wods.length > 0;
+
+            if (!hasWod) {
+              html += `<div class="day-card rest${isToday?' today':''}">
+                <div class="day-header"><span class="day-name">${dow}</span><span class="day-num">${day}</span></div>
+                <div class="day-body"><span class="tag tag-rest">💤 Descanso</span></div>
+              </div>`;
+            } else {
+              const w = wods[0];
+              const sportColors = { running:'green', hyrox:'blue', deka:'orange', crossfit:'red' };
+              const sportLabels = { running:'🏃 Running', hyrox:'⚡ Hyrox', deka:'🔥 Deka', crossfit:'🏋 CrossFit' };
+              const diffClass = { baja:'diff-easy', media:'diff-medium', alta:'diff-hard', maxima:'diff-hard' }[w.intensity] || 'diff-medium';
+              const diffLabel = { baja:'🟢 Suave', media:'🟡 Moderado', alta:'🔴 Exigente', maxima:'🔴 Máxima' }[w.intensity] || '🟡 Moderado';
+              html += `<div class="day-card${isToday?' today':''}" onclick='openWodModal(${JSON.stringify(w)})'>
+                <div class="day-header"><span class="day-name">${dow}</span><span class="day-num">${day}</span></div>
+                <div class="day-body">
+                  <span class="tag tag-${w.sport}">${sportLabels[w.sport] || w.sport}</span>
+                  <div class="day-desc">${w.title || ''}</div>
+                  <div class="difficulty ${diffClass}">${diffLabel}</div>
+                </div>
+              </div>`;
+            }
+          }
+        });
+        html += `</div>`;
+      });
+    }
+    container.innerHTML = html;
+  }
+
+  window.openWodModal = function(w) {
+    const MONTH_NAMES_SHORT = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    const parts = w.date.split('-');
+    const d = parseInt(parts[2]);
+    const m = parseInt(parts[1]) - 1;
+    const dateObj = new Date(parseInt(parts[0]), m, d);
+    const dowFull = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'][dateObj.getDay()];
+
+    document.getElementById('modalDate').textContent = `${d} ${MONTH_NAMES_SHORT[m]}`;
+    document.getElementById('modalDay').textContent = `${dowFull}`;
+
+    const sportLabels = { running:'Running', hyrox:'Hyrox', deka:'Deka', crossfit:'CrossFit' };
+    const diffLabel = { baja:'🟢 Suave', media:'🟡 Moderado', alta:'🔴 Exigente', maxima:'🔴 Máxima' }[w.intensity] || '🟡 Moderado';
+    const diffClass = { baja:'diff-easy', media:'diff-medium', alta:'diff-hard', maxima:'diff-hard' }[w.intensity] || 'diff-medium';
+
+    let html = `<span class="modal-sport-tag modal-sport-${w.sport}">${sportLabels[w.sport] || w.sport}</span>`;
+    html += `<div style="font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1.1;margin-bottom:6px;">${w.title || 'Entrenamiento'}</div>`;
+    html += `<div class="modal-diff-row"><span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">Intensidad:</span><span class="difficulty ${diffClass}">${diffLabel}</span></div>`;
+
+    if (w.duration || w.volume || w.type) {
+      html += `<div class="stats-grid">`;
+      if (w.duration) html += `<div class="stat-box"><div class="stat-label">Duración</div><div class="stat-val">${w.duration}</div></div>`;
+      if (w.volume)   html += `<div class="stat-box"><div class="stat-label">Volumen</div><div class="stat-val">${w.volume}</div></div>`;
+      if (w.type)     html += `<div class="stat-box"><div class="stat-label">Tipo</div><div class="stat-val" style="font-size:15px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">${w.type}</div></div>`;
+      html += `</div>`;
+    }
+
+    if (w.notes) {
+      html += `<div class="tip-box"><strong>💡 Nota del entrenador</strong>${w.notes}</div>`;
+    }
+
+    const sections = [
+      { key:'warmup', label:'Calentamiento' },
+      { key:'main',   label:'Parte Principal' },
+      { key:'metcon', label:'MetCon / Finisher' },
+      { key:'cooldown', label:'Vuelta a la Calma' },
+    ];
+
+    sections.forEach(s => {
+      if (w[s.key]) {
+        html += `<div class="workout-block"><div class="workout-title">${s.label}</div>`;
+        const lines = w[s.key].split('\n').filter(l => l.trim());
+        lines.forEach(line => {
+          html += `<div class="workout-item"><div class="workout-bullet"></div><div>${line.trim()}</div></div>`;
+        });
+        html += `</div>`;
+      }
+    });
+
+    document.getElementById('modalBody').innerHTML = html;
+    document.getElementById('modalOverlay').classList.add('open');
+  };
+
+  window.closeModal = function() { document.getElementById('modalOverlay').classList.remove('open'); };
+  window.closeOnOverlay = function(e) { if(e.target===document.getElementById('modalOverlay')) closeModal(); };
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
+
+  // Si ya autenticado, carga directamente
+  if (localStorage.getItem('train_auth') === '1') {
+    loadCalendar();
+  }
+
+  // DEMO DATA (mientras configuras Firebase)
+  function getDemoData() {
+    const m = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}`;
+    return [
+      { id:'1', date:`${m}-04`, sport:'running', title:'Rodaje Z2 — 45 min', intensity:'baja', duration:'45\'', volume:'Bajo', type:'Aeróbico', notes:'Mantén la frecuencia cardíaca en zona 2. Puedes hablar durante toda la carrera.', warmup:'10 min marcha + movilidad tobillos', main:'35 min @ FC zona 2 (65-70%)\nRitmo conversacional', cooldown:'5 min marcha + estiramientos' },
+      { id:'2', date:`${m}-06`, sport:'hyrox', title:'Simulacro parcial Hyrox', intensity:'alta', duration:'70\'', volume:'Alto', type:'Específico', notes:'Este entreno simula el formato real de Hyrox. Controla el ritmo en las estaciones.', warmup:'15 min activación + movilidad caderas y hombros', main:'4 rondas:\n1km ski erg\n50m sled push\n50m sled pull\n200m farmer carry', metcon:'100 wall balls @ ritmo competición' },
+      { id:'3', date:`${m}-10`, sport:'running', title:'Series 1000m', intensity:'alta', duration:'55\'', volume:'Medio', type:'Velocidad', warmup:'15 min carrera suave + técnica', main:'6 × 1000m @ ritmo 10K\nDescanso: 2 min entre series', cooldown:'10 min suave + estiramientos' },
+      { id:'4', date:`${m}-13`, sport:'deka', title:'Deka Fit — Circuito completo', intensity:'maxima', duration:'75\'', volume:'Alto', type:'Funcional', notes:'Simula el formato real de Deka. 10 estaciones, 2 pasadas con 3 min de descanso.', warmup:'10 min bici suave + movilidad general', main:'Circuito 10 estaciones:\nRemo 500m\nBurpees 20 rep\nKB Swing 30 rep\nBox step 40 rep\nSkiErg 500m\nSlamball 20 rep\nAir Bike cals\nPush-ups 30 rep\nFarmer carry 50m\nSandbag squat 20 rep', cooldown:'Recuperación activa 10 min' },
+      { id:'5', date:`${m}-17`, sport:'hyrox', title:'Running economy + Sled', intensity:'alta', duration:'60\'', volume:'Medio', type:'Específico', warmup:'Drills Hyrox + activación glúteos', main:'3 bloques:\n1km @ ritmo carrera Hyrox\n50m Sled push pesado\n50m Sled pull\nDescanso 3 min — repetir x3', metcon:'Core: 3×15 GHD sit-ups' },
+      { id:'6', date:`${m}-20`, sport:'running', title:'Tirada larga', intensity:'baja', duration:'90\'', volume:'Muy alto', type:'Fondo', warmup:'5 min marcha + movilidad', main:'80 min @ Z2-Z3\nKm 60-75 @ ritmo maratón objetivo', cooldown:'Vuelta calma + cadencia' },
+    ];
+  }
+
+</script>
+</body>
+</html>

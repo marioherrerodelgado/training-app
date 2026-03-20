@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRAIN · Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --dark: #111318;
+    --card: #181c24;
+    --border: #252a35;
+    --red: #e8212e;
+    --red-dim: #7a1118;
+    --orange: #ff6b00;
+    --gold: #f5c842;
+    --white: #f0eeea;
+    --muted: #8a8f9e;
+    --green: #2ecc71;
+    --blue: #4fa3e0;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--black); color:var(--white); font-family:'Barlow',sans-serif; min-height:100vh; }
+
+  /* LOGIN */
+  .login-screen { position:fixed; inset:0; background:var(--black); z-index:200; display:flex; align-items:center; justify-content:center; }
+  .login-screen.hidden { display:none; }
+  .login-box { background:var(--dark); border:1px solid var(--border); border-top:3px solid var(--red); padding:40px 48px; width:100%; max-width:400px; }
+  .login-logo { font-family:'Bebas Neue',sans-serif; font-size:44px; line-height:1; margin-bottom:4px; }
+  .login-logo span { color:var(--red); }
+  .login-sub { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--muted); margin-bottom:32px; }
+  .login-input { width:100%; background:rgba(255,255,255,0.04); border:1px solid var(--border); padding:12px 16px; color:var(--white); font-family:'Barlow',sans-serif; font-size:15px; outline:none; margin-bottom:20px; transition:border-color .2s; }
+  .login-input:focus { border-color:var(--red-dim); }
+  .login-btn { width:100%; background:var(--red); border:none; color:var(--white); font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px; padding:12px; cursor:pointer; }
+  .login-btn:hover { background:#c5131f; }
+  .login-error { font-size:12px; color:var(--red); font-family:'Barlow Condensed',sans-serif; margin-top:10px; display:none; }
+  .login-error.show { display:block; }
+
+  /* ADMIN LAYOUT */
+  .admin { display:none; }
+  .admin.visible { display:block; }
+  .admin-header { background:var(--dark); border-bottom:1px solid var(--border); padding:20px 32px; display:flex; align-items:center; justify-content:space-between; }
+  .admin-logo { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:2px; }
+  .admin-logo span { color:var(--red); }
+  .admin-sub { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); }
+  .logout-btn { background:none; border:1px solid var(--border); color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; padding:6px 14px; cursor:pointer; transition:all .15s; }
+  .logout-btn:hover { border-color:var(--red); color:var(--red); }
+
+  .admin-body { padding:32px; max-width:900px; margin:0 auto; }
+
+  /* TABS */
+  .tabs { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:28px; }
+  .tab-btn { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:3px; text-transform:uppercase; padding:10px 20px; background:none; border:none; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; transition:all .15s; }
+  .tab-btn.active { color:var(--white); border-bottom-color:var(--red); }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+
+  /* FORM */
+  .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .form-full { grid-column:1/-1; }
+  .form-group { margin-bottom:0; }
+  label { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); font-weight:600; display:block; margin-bottom:6px; }
+  input, select, textarea {
+    width:100%; background:rgba(255,255,255,0.04); border:1px solid var(--border);
+    padding:10px 14px; color:var(--white); font-family:'Barlow',sans-serif; font-size:14px; outline:none; transition:border-color .2s;
+    border-radius:2px;
+  }
+  input:focus, select:focus, textarea:focus { border-color:var(--red-dim); }
+  select option { background:var(--dark); }
+  textarea { resize:vertical; line-height:1.6; min-height:80px; }
+  .form-hint { font-size:11px; color:var(--muted); margin-top:4px; font-family:'Barlow Condensed',sans-serif; letter-spacing:.5px; }
+
+  .section-title { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--red); font-weight:600; margin:24px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+
+  .submit-btn {
+    background:var(--red); border:none; color:var(--white);
+    font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px;
+    padding:13px 40px; cursor:pointer; transition:background .15s; margin-top:8px;
+  }
+  .submit-btn:hover { background:#c5131f; }
+  .submit-btn:disabled { background:var(--muted); cursor:not-allowed; }
+
+  /* ALERTS */
+  .alert { padding:12px 16px; border-radius:2px; font-family:'Barlow Condensed',sans-serif; font-size:13px; letter-spacing:1px; margin-bottom:20px; display:none; }
+  .alert.show { display:block; }
+  .alert-success { background:rgba(46,204,113,0.1); border:1px solid rgba(46,204,113,0.3); color:var(--green); }
+  .alert-error   { background:rgba(232,33,46,0.1); border:1px solid rgba(232,33,46,0.3); color:var(--red); }
+
+  /* WOD LIST */
+  .wod-list { display:flex; flex-direction:column; gap:10px; }
+  .wod-item { background:var(--card); border:1px solid var(--border); padding:14px 18px; display:flex; align-items:center; gap:14px; }
+  .wod-item-date { font-family:'Bebas Neue',sans-serif; font-size:26px; line-height:1; color:var(--muted); min-width:52px; }
+  .wod-item-sport { font-family:'Barlow Condensed',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; font-weight:700; padding:2px 8px; border:1px solid; }
+  .sport-running { border-color:var(--green); color:var(--green); }
+  .sport-hyrox   { border-color:var(--blue); color:var(--blue); }
+  .sport-deka    { border-color:var(--orange); color:var(--orange); }
+  .sport-crossfit{ border-color:var(--red); color:var(--red); }
+  .wod-item-title { flex:1; font-size:14px; color:var(--white); }
+  .wod-item-actions { display:flex; gap:8px; }
+  .btn-delete { background:none; border:1px solid var(--border); color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:2px; padding:5px 10px; cursor:pointer; transition:all .15s; }
+  .btn-delete:hover { border-color:var(--red); color:var(--red); }
+
+  /* MONTH SELECTOR FOR LIST */
+  .list-controls { display:flex; gap:12px; align-items:center; margin-bottom:20px; flex-wrap:wrap; }
+  .list-controls input, .list-controls select { width:auto; }
+
+  .no-wods { text-align:center; padding:40px; color:var(--muted); font-family:'Barlow Condensed',sans-serif; letter-spacing:2px; font-size:12px; text-transform:uppercase; border:1px dashed var(--border); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">TRAIN<span>.</span> ADMIN</div>
+    <div class="login-sub">Panel de administración — solo entrenador</div>
+    <label>Contraseña admin</label>
+    <input type="password" class="login-input" id="adminPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkAdmin()">
+    <button class="login-btn" onclick="checkAdmin()">ACCEDER</button>
+    <div class="login-error" id="adminError">Contraseña incorrecta.</div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin" id="adminPanel">
+  <div class="admin-header">
+    <div>
+      <div class="admin-logo">TRAIN<span>.</span> ADMIN</div>
+      <div class="admin-sub">Panel de gestión de entrenamientos</div>
+    </div>
+    <button class="logout-btn" onclick="adminLogout()">Cerrar sesión</button>
+  </div>
+
+  <div class="admin-body">
+    <div class="alert alert-success" id="alertSuccess">✓ WOD guardado correctamente en Firebase</div>
+    <div class="alert alert-error"   id="alertError">✗ Error al guardar. Comprueba la configuración de Firebase.</div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('upload',this)">Subir WOD</button>
+      <button class="tab-btn" onclick="switchTab('list',this)">Ver / Eliminar</button>
+    </div>
+
+    <!-- TAB: UPLOAD -->
+    <div class="tab-panel active" id="tab-upload">
+      <form id="wodForm" onsubmit="submitWod(event)">
+        <div class="section-title">Información básica</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Fecha</label>
+            <input type="date" id="f-date" required>
+          </div>
+          <div class="form-group">
+            <label>Deporte</label>
+            <select id="f-sport" required>
+              <option value="">— Selecciona —</option>
+              <option value="running">🏃 Running</option>
+              <option value="hyrox">⚡ Hyrox</option>
+              <option value="deka">🔥 Deka</option>
+              <option value="crossfit">🏋 CrossFit</option>
+            </select>
+          </div>
+          <div class="form-group form-full">
+            <label>Título del entrenamiento</label>
+            <input type="text" id="f-title" placeholder="Ej: Simulacro Hyrox parcial — 4 rondas" required>
+          </div>
+          <div class="form-group">
+            <label>Intensidad</label>
+            <select id="f-intensity">
+              <option value="baja">🟢 Baja — Suave</option>
+              <option value="media" selected>🟡 Media — Moderado</option>
+              <option value="alta">🔴 Alta — Exigente</option>
+              <option value="maxima">⚡ Máxima</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Duración estimada</label>
+            <input type="text" id="f-duration" placeholder="Ej: 60'">
+          </div>
+          <div class="form-group">
+            <label>Volumen</label>
+            <input type="text" id="f-volume" placeholder="Ej: Alto, Medio, 12km...">
+          </div>
+          <div class="form-group">
+            <label>Tipo</label>
+            <input type="text" id="f-type" placeholder="Ej: Fuerza, Aeróbico, Específico...">
+          </div>
+        </div>
+
+        <div class="section-title">Contenido del entrenamiento</div>
+        <div class="form-grid">
+          <div class="form-group form-full">
+            <label>Nota del entrenador (opcional)</label>
+            <textarea id="f-notes" placeholder="Explicación general, consejos, qué trabajamos hoy..." rows="3"></textarea>
+          </div>
+          <div class="form-group form-full">
+            <label>Calentamiento</label>
+            <textarea id="f-warmup" placeholder="Una línea por ejercicio. Ej:&#10;10 min carrera suave&#10;Movilidad de cadera&#10;Activación de hombros" rows="4"></textarea>
+            <div class="form-hint">Cada línea = un ítem en el modal</div>
+          </div>
+          <div class="form-group form-full">
+            <label>Parte Principal</label>
+            <textarea id="f-main" placeholder="Una línea por ejercicio o bloque. Ej:&#10;4 rondas:&#10;1km Ski Erg&#10;50m Sled push&#10;50m Sled pull" rows="6"></textarea>
+          </div>
+          <div class="form-group form-full">
+            <label>MetCon / Finisher (opcional)</label>
+            <textarea id="f-metcon" placeholder="Bloque final de acondicionamiento si lo hay..." rows="4"></textarea>
+          </div>
+          <div class="form-group form-full">
+            <label>Vuelta a la calma (opcional)</label>
+            <textarea id="f-cooldown" placeholder="Estiramientos, recuperación activa..." rows="3"></textarea>
+          </div>
+        </div>
+
+        <div style="margin-top:20px;">
+          <button type="submit" class="submit-btn" id="submitBtn">GUARDAR EN FIREBASE</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- TAB: LIST -->
+    <div class="tab-panel" id="tab-list">
+      <div class="list-controls">
+        <div>
+          <label style="display:inline;margin-right:8px;">Mes:</label>
+          <input type="month" id="listMonth" onchange="loadWodList()">
+        </div>
+        <div>
+          <label style="display:inline;margin-right:8px;">Deporte:</label>
+          <select id="listSport" onchange="loadWodList()">
+            <option value="">Todos</option>
+            <option value="running">Running</option>
+            <option value="hyrox">Hyrox</option>
+            <option value="deka">Deka</option>
+            <option value="crossfit">CrossFit</option>
+          </select>
+        </div>
+      </div>
+      <div id="wodList"><div class="no-wods">Selecciona un mes para ver los WODs</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, where, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  // ============================================================
+  // 🔧 CONFIGURACIÓN FIREBASE — misma que en index.html
+  // ============================================================
+const firebaseConfig = {
+  apiKey: "AIzaSyBtMJBfDEwjV9tOZowC4LAoTPjp2rZFO4U",
+  authDomain: "mariohyrox.firebaseapp.com",
+  projectId: "mariohyrox",
+  storageBucket: "mariohyrox.firebasestorage.app",
+  messagingSenderId: "23933117714",
+  appId: "1:23933117714:web:b1ced10a2fdfef3eb6bfcb"
+};
+  // ============================================================
+
+  const ADMIN_PASSWORD = "adminapp2026"; // 🔑 Contraseña del admin (diferente a la de usuario)
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window.checkAdmin = function() {
+    const val = document.getElementById('adminPass').value;
+    if (val === ADMIN_PASSWORD) {
+      sessionStorage.setItem('admin_auth', '1');
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('adminPanel').classList.add('visible');
+      // Set today's date as default
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('f-date').value = today;
+      const now = new Date();
+      document.getElementById('listMonth').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    } else {
+      document.getElementById('adminError').classList.add('show');
+    }
+  };
+
+  if (sessionStorage.getItem('admin_auth') === '1') {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('adminPanel').classList.add('visible');
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('f-date').value = today;
+    const now = new Date();
+    document.getElementById('listMonth').value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  }
+
+  window.adminLogout = function() {
+    sessionStorage.removeItem('admin_auth');
+    location.reload();
+  };
+
+  window.switchTab = function(tab, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + tab).classList.add('active');
+    if (tab === 'list') loadWodList();
+  };
+
+  function showAlert(type, msg) {
+    const el = document.getElementById('alert' + (type === 'success' ? 'Success' : 'Error'));
+    if (msg) el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 4000);
+  }
+
+  window.submitWod = async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'GUARDANDO...';
+
+    const dateVal = document.getElementById('f-date').value;
+    const [y, m] = dateVal.split('-');
+
+    const wod = {
+      date: dateVal,
+      month: `${y}-${m}`,
+      sport: document.getElementById('f-sport').value,
+      title: document.getElementById('f-title').value,
+      intensity: document.getElementById('f-intensity').value,
+      duration: document.getElementById('f-duration').value,
+      volume: document.getElementById('f-volume').value,
+      type: document.getElementById('f-type').value,
+      notes: document.getElementById('f-notes').value,
+      warmup: document.getElementById('f-warmup').value,
+      main: document.getElementById('f-main').value,
+      metcon: document.getElementById('f-metcon').value,
+      cooldown: document.getElementById('f-cooldown').value,
+      createdAt: new Date().toISOString(),
+    };
+
+    // Remove empty fields
+    Object.keys(wod).forEach(k => { if (!wod[k]) delete wod[k]; });
+    wod.date = dateVal; wod.month = `${y}-${m}`; // always keep these
+
+    try {
+      await addDoc(collection(db, 'wods'), wod);
+      showAlert('success');
+      document.getElementById('wodForm').reset();
+      document.getElementById('f-date').value = dateVal;
+    } catch(err) {
+      console.error(err);
+      showAlert('error', '✗ Error: ' + err.message);
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'GUARDAR EN FIREBASE';
+  };
+
+  window.loadWodList = async function() {
+    const monthVal = document.getElementById('listMonth').value;
+    const sportVal = document.getElementById('listSport').value;
+    const container = document.getElementById('wodList');
+    if (!monthVal) return;
+
+    container.innerHTML = '<div class="no-wods">Cargando...</div>';
+
+    try {
+      let q;
+      if (sportVal) {
+        q = query(collection(db,'wods'), where('month','==',monthVal), where('sport','==',sportVal));
+      } else {
+        q = query(collection(db,'wods'), where('month','==',monthVal));
+      }
+      const snap = await getDocs(q);
+      const wods = [];
+      snap.forEach(d => wods.push({ id: d.id, ...d.data() }));
+      wods.sort((a,b) => a.date.localeCompare(b.date));
+
+      if (wods.length === 0) {
+        container.innerHTML = '<div class="no-wods">No hay WODs este mes con ese filtro</div>';
+        return;
+      }
+
+      const sportLabels = { running:'Running', hyrox:'Hyrox', deka:'Deka', crossfit:'CrossFit' };
+      const MONTH_NAMES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      let html = '<div class="wod-list">';
+      wods.forEach(w => {
+        const parts = w.date.split('-');
+        const day = parts[2];
+        const mon = MONTH_NAMES[parseInt(parts[1])-1];
+        html += `<div class="wod-item">
+          <div class="wod-item-date">${day}<br><span style="font-size:12px;font-family:'Barlow Condensed',sans-serif;">${mon}</span></div>
+          <span class="wod-item-sport sport-${w.sport}">${sportLabels[w.sport]||w.sport}</span>
+          <div class="wod-item-title">${w.title||'Sin título'}</div>
+          <div class="wod-item-actions">
+            <button class="btn-delete" onclick="deleteWod('${w.id}')">ELIMINAR</button>
+          </div>
+        </div>`;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    } catch(err) {
+      container.innerHTML = `<div class="no-wods">Error: ${err.message}</div>`;
+    }
+  };
+
+  window.deleteWod = async function(id) {
+    if (!confirm('¿Eliminar este WOD? Esta acción no se puede deshacer.')) return;
+    try {
+      await deleteDoc(doc(db, 'wods', id));
+      showAlert('success', '✓ WOD eliminado correctamente');
+      loadWodList();
+    } catch(err) {
+      showAlert('error', '✗ Error al eliminar: ' + err.message);
+    }
+  };
+
+</script>
+</body>
+</html>
