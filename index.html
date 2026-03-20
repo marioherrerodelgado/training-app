@@ -286,6 +286,10 @@ body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--bg); col
 <!-- PROGRESS PANEL -->
 <div class="prog-panel" id="progPanel">
   <div class="prog-hdr">
+    <div class="det-back" onclick="closePanel('prog')" style="margin-bottom:12px;">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polyline points="11,3 6,9 11,15" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></svg>
+      Atrás
+    </div>
     <div class="prog-title">Progreso</div>
     <div class="prog-sub" id="progSubLabel">Este mes</div>
   </div>
@@ -298,6 +302,10 @@ body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--bg); col
 <div class="prof-panel" id="profPanel">
   <div class="prof-body">
     <div class="trainer-hero">
+      <div class="det-back" onclick="closePanel('perf')" style="margin-bottom:16px;">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><polyline points="11,3 6,9 11,15" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></svg>
+        Atrás
+      </div>
       <div class="trainer-avatar">M</div>
       <div class="trainer-name-big">Mario</div>
       <div class="trainer-role">Entrenador personal</div>
@@ -319,14 +327,14 @@ body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--bg); col
           <span class="cr-label">Instagram</span>
           <span class="cr-arrow">›</span>
         </a>
-        <a class="contact-row" href="https://wa.me/34600000000" target="_blank">
+        <a class="contact-row" href="https://chat.whatsapp.com/D9vFxTySGXn1CkIfImuyfb?mode=gi_t" target="_blank">
           <div class="cr-icon" style="background:rgba(37,211,102,.1)">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2C5.13 2 2 5.13 2 9c0 1.37.38 2.65 1.02 3.75L2 16l3.37-1.01A6.96 6.96 0 009 16c3.87 0 7-3.13 7-7s-3.13-7-7-7z" stroke="#25d366" stroke-width="1.5" fill="none"/><path d="M6.5 7.5s.5 1 1.5 2 2 1.5 2 1.5l1-1s.5-.5 1 0l1 1c.5.5 0 1.5-1 2s-2.5.5-4-1-2-2.5-1-4c.5-1 1.5-1.5 2-1L9.5 8c.5.5 0 1-.5.5" stroke="#25d366" stroke-width="1.2" fill="none"/></svg>
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5C4.86 1.5 1.5 4.86 1.5 9c0 1.5.41 2.91 1.13 4.11L1.5 16.5l3.47-1.1A7.43 7.43 0 009 16.5c4.14 0 7.5-3.36 7.5-7.5S13.14 1.5 9 1.5z" fill="#25d366"/><path d="M13.2 11.1c-.2-.1-1.2-.6-1.38-.66-.18-.06-.31-.1-.44.1-.13.2-.5.66-.62.8-.11.13-.23.15-.43.05a5.5 5.5 0 01-1.62-1c-.6-.53-1-1.18-1.12-1.38-.11-.2-.01-.3.09-.4l.39-.45c.1-.11.13-.2.2-.33.06-.13.03-.25-.02-.35-.05-.1-.44-1.06-.6-1.45-.16-.38-.32-.33-.44-.34h-.37c-.13 0-.34.05-.52.25-.18.2-.68.66-.68 1.61s.7 1.87.8 2c.1.12 1.37 2.09 3.32 2.93.46.2.82.32 1.1.41.46.15.88.13 1.21.08.37-.06 1.14-.47 1.3-.92.16-.45.16-.84.11-.92-.05-.08-.18-.13-.38-.23z" fill="white"/></svg>
           </div>
-          <span class="cr-label">WhatsApp</span>
+          <span class="cr-label">Unirse al grupo</span>
           <span class="cr-arrow">›</span>
         </a>
-        <a class="contact-row" href="mailto:entrenador@train.com">
+        <a class="contact-row" href="/cdn-cgi/l/email-protection#94f1fae0e6f1faf5f0fbe6d4e0e6f5fdfabaf7fbf9">
           <div class="cr-icon" style="background:rgba(0,122,255,.1)">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="10" rx="2" stroke="#007aff" stroke-width="1.5"/><polyline points="2,5 9,10 16,5" stroke="#007aff" stroke-width="1.5" stroke-linecap="round"/></svg>
           </div>
@@ -361,7 +369,7 @@ body { font-family:'DM Sans',-apple-system,sans-serif; background:var(--bg); col
   </div>
 </div>
 
-<script type="module">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -510,10 +518,28 @@ window.jd = function(d) {
 };
 
 window.scrollToToday = function() {
+  // Close any open panels first
+  document.getElementById('progPanel').classList.remove('open');
+  document.getElementById('profPanel').classList.remove('open');
+  document.body.style.overflow = '';
+  // If not current month, load current month first
+  const todayYear = today.getFullYear(), todayMonth = today.getMonth();
+  if (Y !== todayYear || M !== todayMonth) {
+    Y = todayYear; M = todayMonth;
+    loadMonth().then(() => {
+      setTimeout(() => {
+        const el = document.getElementById('td-sec');
+        if (el) el.scrollIntoView({behavior:'smooth',block:'start'});
+        const tw = document.querySelector('.wd.tod');
+        if (tw) { tw.classList.add('sel'); tw.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'}); }
+      }, 150);
+    });
+    return;
+  }
   const el = document.getElementById('td-sec');
   if (el) el.scrollIntoView({behavior:'smooth',block:'start'});
   const tw = document.querySelector('.wd.tod');
-  if (tw) tw.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+  if (tw) { tw.classList.add('sel'); tw.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'}); }
 };
 
 window.setFilter = function(s, btn) {
@@ -575,13 +601,28 @@ window.navTo = function(tab) {
   });
   const activeBtn = document.getElementById('bni-'+tab);
   if (activeBtn) { activeBtn.classList.add('on'); activeBtn.querySelector('.bni-l').style.color = 'var(--accent)'; }
-  document.getElementById('progPanel').classList.remove('open');
-  document.getElementById('profPanel').classList.remove('open');
-  document.body.style.overflow = '';
+  if (tab !== 'prog') document.getElementById('progPanel').classList.remove('open');
+  if (tab !== 'perf') document.getElementById('profPanel').classList.remove('open');
+  if (tab !== 'prog' && tab !== 'perf') document.body.style.overflow = '';
   if (tab === 'hoy') { scrollToToday(); }
   else if (tab === 'mes') { openMM(); }
   else if (tab === 'prog') { openProg(); }
   else if (tab === 'perf') { openProf(); }
+};
+
+window.closePanel = function(tab) {
+  document.getElementById(tab === 'prog' ? 'progPanel' : 'profPanel').classList.remove('open');
+  document.body.style.overflow = '';
+  // Reset nav to hoy
+  ['hoy','mes','prog','perf'].forEach(t => {
+    const btn = document.getElementById('bni-'+t);
+    if (!btn) return;
+    btn.classList.remove('on');
+    btn.querySelector('.bni-l').style.color = '';
+  });
+  const hoyBtn = document.getElementById('bni-hoy');
+  if (hoyBtn) { hoyBtn.classList.add('on'); hoyBtn.querySelector('.bni-l').style.color = 'var(--accent)'; }
+  curNav = 'hoy';
 };
 
 // ── PROGRESS ──
@@ -683,25 +724,67 @@ async function buildProgress() {
     html += '</div></div>';
   }
 
-  // ── PRÓXIMOS EVENTOS ──
+  // ── CALENDARIO DE EVENTOS ──
+  // Collect ALL wods for the month as events
+  const allEvents = pw.slice().sort((a,b) => a.date.localeCompare(b.date));
+  // Build mini calendar grid
+  const dim2 = new Date(Y, M+1, 0).getDate();
+  const firstDow = new Date(Y, M, 1).getDay();
+  const startOffset = firstDow === 0 ? 6 : firstDow - 1;
+  const wodDayMap = {};
+  pw.forEach(w => { const d = parseInt(w.date.split('-')[2]); if(!wodDayMap[d]) wodDayMap[d]=[]; wodDayMap[d].push(w); });
+  const todayD = (Y===today.getFullYear()&&M===today.getMonth()) ? today.getDate() : -1;
+  const dayNames = ['L','M','X','J','V','S','D'];
+
   html += '<div class="pcard">';
-  html += '<div class="section-hdr">Próximos eventos y competiciones</div>';
-  if (upcomingWods.length === 0) {
-    html += '<div class="no-events">No hay eventos próximos este mes</div>';
-  } else {
-    upcomingWods.forEach(w => {
+  html += `<div class="section-hdr">Calendario — ${MN[M]} ${Y}</div>`;
+  // Day name headers
+  html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px;">';
+  dayNames.forEach(d => { html += `<div style="text-align:center;font-size:10px;font-weight:700;color:var(--text3);padding:4px 0;">${d}</div>`; });
+  html += '</div>';
+  // Calendar days
+  html += '<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;">';
+  for (let i = 0; i < startOffset; i++) html += '<div></div>';
+  for (let d = 1; d <= dim2; d++) {
+    const ws2 = wodDayMap[d];
+    const isToday2 = d === todayD;
+    const col = ws2 ? sportColors[ws2[0].sport]||'var(--hyrox)' : 'transparent';
+    const txtCol = isToday2 ? '#fff' : ws2 ? 'var(--text)' : 'var(--text3)';
+    const bg = isToday2 ? 'var(--accent)' : ws2 ? 'var(--bg)' : 'transparent';
+    const border = ws2 && !isToday2 ? `2px solid ${col}` : isToday2 ? 'none' : '1px solid var(--border)';
+    html += `<div style="aspect-ratio:1;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:${bg};border:${border};cursor:${ws2?'pointer':'default'}" ${ws2?`onclick='openDet(${JSON.stringify(ws2[0])})'`:''}>
+      <span style="font-size:13px;font-weight:${isToday2||ws2?700:400};color:${txtCol};line-height:1">${d}</span>
+      ${ws2&&!isToday2?`<div style="width:5px;height:5px;border-radius:50%;background:${col};margin-top:2px;"></div>`:''}
+    </div>`;
+  }
+  html += '</div>';
+
+  // Upcoming events list below calendar
+  const futureEvents = pw.filter(w => {
+    const wDate = new Date(w.date + 'T00:00:00');
+    return wDate >= new Date(today.toDateString());
+  }).sort((a,b) => a.date.localeCompare(b.date)).slice(0,6);
+
+  if (futureEvents.length > 0) {
+    html += '<div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px;">';
+    html += '<div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.7px;text-transform:uppercase;margin-bottom:8px;">Próximos entrenamientos</div>';
+    futureEvents.forEach(w => {
       const pts = w.date.split('-');
       const d = parseInt(pts[2]), mo = parseInt(pts[1])-1;
       const sc = {running:'run',hyrox:'hyrox',deka:'deka',crossfit:'crossfit'}[w.sport]||'run';
-      html += `<div class="event-row">
-        <div class="event-date-box"><span class="ev-day">${d}</span><span class="ev-mon">${MS[mo]}</span></div>
+      const col2 = sportColors[w.sport]||'var(--hyrox)';
+      html += `<div class="event-row" onclick='openDet(${JSON.stringify(w)})' style="cursor:pointer;">
+        <div class="event-date-box" style="background:var(--bg);border:2px solid ${col2};">
+          <span class="ev-day">${d}</span><span class="ev-mon">${MS[mo]}</span>
+        </div>
         <div class="event-info">
-          <div class="ev-name">${w.title||'Evento'}</div>
+          <div class="ev-name">${w.title||'Entrenamiento'}</div>
           <div class="ev-meta">${sportLabels[w.sport]||w.sport}${w.duration?' · '+w.duration:''}</div>
         </div>
         <span class="ev-dist ${sc}">${sportLabels[w.sport]||w.sport}</span>
       </div>`;
     });
+    html += '</div>';
   }
   html += '</div>';
 
@@ -728,9 +811,4 @@ function demo() {
     {id:'5',date:`${mp}-17`,sport:'hyrox',title:'Running economy + Sled',intensity:'alta',duration:"60'",volume:'Medio',type:'Específico',warmup:'Drills Hyrox + activación glúteos',main:'3 bloques:\n1km @ ritmo Hyrox\n50m Sled push pesado\n50m Sled pull\nDescanso 3 min — ×3',metcon:'Core: 3×15 GHD sit-ups'},
     {id:'6',date:`${mp}-20`,sport:'running',title:'Tirada larga — fondo',intensity:'baja',duration:"90'",volume:'Muy alto',type:'Fondo',notes:'La tirada más importante del mes. Ve muy tranquilo.',warmup:'5 min marcha',main:'80 min @ Z2-Z3\nKm 60-75 @ ritmo maratón',cooldown:'Vuelta calma + cadencia'},
     {id:'7',date:`${mp}-24`,sport:'deka',title:'Deka Strength — Upper',intensity:'media',duration:"50'",volume:'Medio',type:'Fuerza',warmup:'10 min movilidad hombros',main:'5×5 Press banca @ 75%\n4×8 Remo barra\n3×10 Arnold press\n3×12 Face pulls',cooldown:'Estiramientos pecho y espalda'},
-    {id:'8',date:`${mp}-27`,sport:'hyrox',title:'Hyrox Doubles simulation',intensity:'maxima',duration:"80'",volume:'Alto',type:'Competición',notes:'Simulacro al 90%. Mejora los tiempos del último.',warmup:'20 min activación específica',main:'8 estaciones dobles:\n2×1km Ski Erg\n2×50m Sled Push\n2×50m Sled Pull\n2×200m Farmer Carry',metcon:'200 Wall Balls en el menor tiempo posible'},
-  ];
-}
-</script>
-</body>
-</html>
+    {id:'8',date:`${mp}-27`,sport:'hyrox',title:'Hyrox Doubles simulation',intensity:'maxima',duration:"80'",volume:'Alto',type:'Competición',notes:'Simulacro al 90%. Mejora los tiempos del último.',warmup:'20 min activación específica',main:'8 estaciones dobles:\n2×1km Sk
