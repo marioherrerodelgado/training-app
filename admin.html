@@ -409,7 +409,7 @@ table.prev tr:hover td{background:var(--sf2)}
     <div class="modal-msg" id="modal-msg">Esta accion no se puede deshacer.</div>
     <div class="modal-btns">
       <button class="btn btn-b" onclick="closeModal()">Cancelar</button>
-      <button class="btn btn-r" id="modal-confirm">Eliminar</button>
+      <button class="btn btn-r" id="modal-confirm" onclick="doDelete()">Eliminar</button>
     </div>
   </div>
 </div>
@@ -449,11 +449,7 @@ function logout() {
 if (localStorage.getItem('ih_admin') === '1') {
   document.getElementById('ls').classList.add('h');
   document.getElementById('app').classList.add('on');
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAdmin);
-  } else {
-    initAdmin();
-  }
+  window.addEventListener('load', initAdmin);
 }
 
 // ── SPORT SELECTOR ──
@@ -466,11 +462,10 @@ function selSport(sp, el) {
 // ── INIT ──
 async function initAdmin() {
   try {
-    const { initializeApp, getApps, getApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+    const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
     const { getFirestore, collection, query, orderBy, getDocs, addDoc, setDoc, deleteDoc, doc, where } =
       await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-    const fbApp = getApps().length === 0 ? initializeApp(FB_CFG) : getApp();
-    db = getFirestore(fbApp);
+    db = getFirestore(initializeApp(FB_CFG));
     _fb = { collection, query, orderBy, getDocs, addDoc, setDoc, deleteDoc, doc, where };
     showStatus('st-add', 'ok', 'Conectado a Firebase');
     setTimeout(() => hideStatus('st-add'), 2500);
@@ -695,11 +690,12 @@ function confirmDel(id, title) {
 }
 function closeModal() { document.getElementById('modal-ov').classList.remove('open'); pendingDelId = null; }
 async function doDelete() {
+  const idToDelete = pendingDelId;  // guardar antes de cerrar modal
   closeModal();
-  if (!pendingDelId || !db || !_fb) return;
+  if (!idToDelete || !db || !_fb) return;
   try {
-    await _fb.deleteDoc(_fb.doc(db,'wods',pendingDelId));
-    allWods = allWods.filter(w => w.id !== pendingDelId);
+    await _fb.deleteDoc(_fb.doc(db,'wods',idToDelete));
+    allWods = allWods.filter(w => w.id !== idToDelete);
     buildMonthFilters();
     renderList();
     showStatus('st-list','ok','WOD eliminado');
@@ -707,7 +703,6 @@ async function doDelete() {
   } catch(e) {
     showStatus('st-list','err','Error al eliminar: '+e.message);
   }
-  pendingDelId = null;
 }
 
 // ── HELPERS ──
@@ -722,7 +717,7 @@ window.dL=dL; window.logout=logout; window.swTab=swTab; window.saveWod=saveWod; 
 window.dzOver=dzOver; window.dzLeave=dzLeave; window.dzDrop=dzDrop; window.dzFile=dzFile;
 window.bulkUpload=bulkUpload; window.clearBulk=clearBulk;
 window.loadList=loadList; window.setMF=setMF; window.setSportFilter=setSportFilter;
-window.confirmDel=confirmDel; window.closeModal=closeModal; window.selSport=selSport;
+window.confirmDel=confirmDel; window.closeModal=closeModal; window.doDelete=doDelete; window.selSport=selSport;
 </script>
 </body>
 </html>
